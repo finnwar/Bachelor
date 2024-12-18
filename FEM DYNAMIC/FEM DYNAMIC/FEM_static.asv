@@ -25,8 +25,8 @@ H = 0.1;      %Höhe[m]
 forceDistribution = @(u,v) ([0;0]);
 
 %Auflösung
-NumberOfElementsX = 15; % Unterteilung der X-Richtung
-NumberOfElementsY = 5; % Unterteilung der Y-Richtung
+NumberOfElementsX = 10; % Unterteilung der X-Richtung
+NumberOfElementsY = 4; % Unterteilung der Y-Richtung
 TotalNumberOfElements = NumberOfElementsX*NumberOfElementsY;
 
 %% 
@@ -157,18 +157,12 @@ U_Gravity = K\(M*g*ones(size(f)));
 %Eigenmdoes
 [eigenVectors,eigenFrequencies] = eig(K,M);
 
-%Damping Matrix via Rayleigh-Coefficients
-alpha = 5;
-beta = 0.005;
-
-D = alpha * M + beta * K;
 
 % Model Reduction
-Phi = [U,U_Gravity,eigenVectors(:,1:4)];
+Phi = [U,U_Gravity,eigenVectors(1:4)];
 
 M_tilde = Phi'*M*Phi;
 K_tilde = Phi'*M*Phi;
-D_tilde = Phi'*D*Phi;
 f_tilde = Phi'*f;
 
 % Transient Analysis
@@ -176,10 +170,10 @@ f_tilde = Phi'*f;
 
 M_tilde_inv = inv(M_tilde);
 %opt = odeset('maxstep',1e-9);
-tspan = [0 1];
+tspan = [0 1e-2];
 
 U_0 = U;
-q_0 = Phi\U_0;
+q_0 = Phi*U_0;
 
 qdot_0 = zeros(length(q_0),1);
 qddot_0 = zeros(length(q_0),1);
@@ -187,12 +181,13 @@ qddot_0 = zeros(length(q_0),1);
 f_tilde_time = zeros(size(f_tilde));
 Y0 = [q_0;qdot_0];
 A = [zeros(size(K_tilde)) eye(size(K_tilde));
-     -M_tilde_inv*K_tilde -M_tilde_inv*D_tilde];
-b = [zeros(size(f_tilde_time));M_tilde_inv*f_tilde_time];
+     -M*K zeros(size(K))];
+b = [zeros(size(f));M_tilde_inv*fTime];
 
 [t,Ysol] = ode45(@(t,Y) timeStepIntegration(t,Y,A,b), tspan, Y0);
 
-
-U_sol = Phi * Ysol(:,1:length(Ysol(1,:))/2)';
 figure
-plot(t,U_sol(end/4,:))
+plot(t,Ysol(:,end/4))
+
+% 
+
