@@ -43,19 +43,19 @@ qddot_0 = zeros(length(q_0),1);
 
 f_tilde_time = zeros(size(f_tilde));
 Y0 = [q_0;qdot_0];
-% A = [zeros(size(K_tilde)) eye(size(K_tilde));
-%      -M_tilde\K_tilde zeros(size(K_tilde))];
+A = [zeros(size(K_tilde)) eye(size(K_tilde));
+     -M_tilde\K_tilde zeros(size(K_tilde))];
 
 % Implementation of Damping Term leads to problems
 
-A = [zeros(size(K_tilde)) eye(size(K_tilde));
-     -M_tilde\K_tilde -D_tilde\K_tilde];
+% A = [zeros(size(K_tilde)) eye(size(K_tilde));
+%      -M_tilde\K_tilde -D_tilde\K_tilde];
 b = [zeros(size(f_tilde_time));M_tilde\f_tilde_time];
 %% 
-opt = odeset(MaxStep = 1e-3);
-tspan = [0 600];
+opt = odeset('MaxStep',1e-9);
+tspan = [0 60];
 
-[t,Ysol] = ode23s(@(t,Y) timeStepIntegration(t,Y,A,b), tspan, Y0, opt);
+[t,Ysol] = ode15s(@(t,Y) timeStepIntegration(t,Y,A,b), tspan, Y0);
 
 
 U_sol = Phi* Ysol(:,1:length(Ysol(1,:))/2)';
