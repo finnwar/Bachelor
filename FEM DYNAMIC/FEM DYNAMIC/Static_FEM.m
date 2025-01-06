@@ -1,8 +1,4 @@
-
-
-
-%Simulation eines einfachen Stabes mithilfe einer 2D-FEM
-
+function [K, M, f, U] = Static_FEM(NumberOfElementsX, NumberOfElementsY)
 %Materialeigenschaften
 
 nu = 0.3;       % Querkontraktion
@@ -25,8 +21,7 @@ H = 0.1;      %Höhe[m]
 forceDistribution = @(u,v) ([0;0]);
 
 %Auflösung
-NumberOfElementsX = 10; % Unterteilung der X-Richtung
-NumberOfElementsY = 4; % Unterteilung der Y-Richtung
+
 TotalNumberOfElements = NumberOfElementsX*NumberOfElementsY;
 
 %% 
@@ -153,41 +148,4 @@ U_x = zeros(n/2,1);
 U_y = zeros(n/2,1);
 % Displacement mode due to gravity
 U_Gravity = K\(M*g*ones(size(f)));
-
-%Eigenmdoes
-[eigenVectors,eigenFrequencies] = eig(K,M);
-
-
-% Model Reduction
-Phi = [U,U_Gravity,eigenVectors(1:4)];
-
-M_tilde = Phi'*M*Phi;
-K_tilde = Phi'*M*Phi;
-f_tilde = Phi'*f;
-
-% Transient Analysis
-
-
-M_tilde_inv = inv(M_tilde);
-%opt = odeset('maxstep',1e-9);
-tspan = [0 1e-2];
-
-U_0 = U;
-q_0 = Phi*U_0;
-
-qdot_0 = zeros(length(q_0),1);
-qddot_0 = zeros(length(q_0),1);
-
-f_tilde_time = zeros(size(f_tilde));
-Y0 = [q_0;qdot_0];
-A = [zeros(size(K_tilde)) eye(size(K_tilde));
-     -M*K zeros(size(K))];
-b = [zeros(size(f));M_tilde_inv*fTime];
-
-[t,Ysol] = ode45(@(t,Y) timeStepIntegration(t,Y,A,b), tspan, Y0);
-
-figure
-plot(t,Ysol(:,end/4))
-
-% 
-
+end
