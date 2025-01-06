@@ -53,7 +53,7 @@ A = [zeros(size(K_tilde)) eye(size(K_tilde));
 b = [zeros(size(f_tilde_time));M_tilde\f_tilde_time];
 %% 
 opt = odeset(MaxStep = 1e-3);
-tspan = [0 600];
+tspan = [0 6];
 
 [t,Ysol] = ode23s(@(t,Y) timeStepIntegration(t,Y,A,b), tspan, Y0, opt);
 
