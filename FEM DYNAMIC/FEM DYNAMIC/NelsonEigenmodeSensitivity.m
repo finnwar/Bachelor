@@ -9,9 +9,7 @@ EigenVectorDerivative = zeros(size(X));
 for i = 1:length(X(:,1))
     F(:,i) = X(:,i)*(Y(:,i).'*dAdp*X(:,i))-dAdp*X(:,i);
     
-    [~,k] = max(abs(X(:,i)).*abs(Y(:,i)));
-
-
+    [~,k] = max(abs(X(:,i)).*abs(Y(:,i)));          %if chosen x_k << max(x) and y_k<<max(y)
     
     CalcMatrix(1:(k-1),1:(k-1))=A(1:(k-1),1:(k-1))-lambda(i)*eye(k-1);
     CalcMatrix((k+1):end,(k+1):end)=A((k+1):end, (k+1):end)-lambda(i)*eye(length(V)-k);
