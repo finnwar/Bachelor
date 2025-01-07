@@ -11,7 +11,7 @@ dMdp = eye(size(X));
 for i = 1:length(X(:,1))
     F = X(:,i)*(Y(:,i).'*dAdp*X(:,i))-dAdp*X(:,i);
     
-    [~,k] = max(abs(X(:,i)).*abs(Y(:,i)));          %if chosen x_k << max(x) and y_k<<max(y)
+    [~,k] = max(abs(X(:,i)).*abs(Y(:,i)));          %if chosen x_k << max(x) and y_k<<max(y), problems may occur
     
 
     
