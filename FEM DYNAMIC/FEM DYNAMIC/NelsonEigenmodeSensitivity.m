@@ -1,12 +1,9 @@
-function [EigenVectorDerivative] =  NelsonEigenmodeSensitivity(A, dAdp, lambda, X, Y)
+function [EigenVectorDerivative] =  NelsonEigenmodeSensitivity(A, dAdp, lambda, X, Y, M, dMdp)
 
 
 V = zeros(size(X(:,1)));
 CalcMatrix = zeros(size(X));
 EigenVectorDerivative = zeros(size(X));
-
-M = eye(size(X));           % Still have to figure out how to get M and dMdp
-dMdp = eye(size(X));
 
 for i = 1:length(X(:,1))
     F = X(:,i)*(Y(:,i).'*dAdp*X(:,i))-dAdp*X(:,i);
