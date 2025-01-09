@@ -6,13 +6,11 @@
 
 length_total = 0.400;     %Barbell length [m]
 length_middle = 0.200;    %Middle part length [m]
-end_length = (length_total-length_middle)/2;
+length_end = (length_total-length_middle)/2;
 
 
 thickness_end = 0.2;    %Thickness of both ends [m]
-thickness_neck = 0.1;   %Thickness of thin middle part [m]
-
-interpolation_factors = GeometricParameterization(end_length,thickness_end, thickness_neck);
+thickness_middle = 0.1;   %Thickness of thin middle part [m]
 
 % Material Constants
 
@@ -24,8 +22,17 @@ nu = 0.3;        %Contraction [-]
 
 g = 9.81;       %Gravitational constant [m/s^2]
 
+% Mesh-Resolution
+
+NumberOfElementsX = 100;
+NumberOfElementsY = 10;
 
 
+
+%Mesh generation
+[NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
+
+%Gaussian Quadrature to receive K, and M Matrices
 
 
 

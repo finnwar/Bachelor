@@ -1,0 +1,24 @@
+%Gaussian Quadrature to generate stiffness and mass matrices
+
+function [K,M] = GaussianQuadrature(NodeGrid, NodeTable, NodePosition, NodePositionTable, NumberOfElementsX, NumberOfElementsY)
+
+TotalNumberOfElements = NumberOfElementsX*NumberOfElementsY;
+
+for e=1:TotalNumberOfElements
+    n = 2;      %Degree of quadrature
+    [xi_vector, xi_weights] = GaussianQuadrature1D(2);
+    [eta_vector, eta_weights] = GaussianQuadrature1D(2);
+    
+    dydeta = 
+
+    for j = 1:n
+        for i = 1:n
+
+            dxdxi = NodePositionTable()
+
+
+
+
+end
+
+
