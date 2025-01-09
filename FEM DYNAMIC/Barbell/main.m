@@ -34,6 +34,8 @@ NumberOfElementsY = 10;
 
 %Gaussian Quadrature to receive K, and M Matrices
 
+[K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY, E, nu, rho);
+
 
 
 
