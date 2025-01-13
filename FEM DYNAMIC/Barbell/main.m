@@ -37,5 +37,11 @@ NumberOfElementsY = 10;
 [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY, E, nu, rho);
 
 
+%Solve static FEM with boundary conditions
+
+U = StaticFEM(K,M,NodeGrid);
+
+PlotDisplacement(U,NodeGrid,NodePosition)
+
 
 
