@@ -7,7 +7,7 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
     
     f_tilde(BoundaryNodes) = [];
     
-    %Reduce system
+    % Eleminate constraints
     K_tilde = K;
     K_tilde(:,BoundaryNodes) = [];
     K_tilde(BoundaryNodes,:) = [];
@@ -20,7 +20,7 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
     M_tilde(:,BoundaryNodes) = [];
     M_tilde(BoundaryNodes,:) = [];
 
-
+    invM_tilde = inv(M_tilde);
 tspan = [0 1];
 
 A = [zeros(size(K_tilde)) eye(size(K_tilde));
@@ -33,7 +33,7 @@ u_dot0(BoundaryNodes) = [];
 
 X0 = [u0;u_dot0];
 A = [zeros(size(K_tilde)) eye(size(K_tilde)); -M_tilde\K_tilde -M_tilde\D_tilde];
-[t,Xsol] = ode23t(@(t,X) timeStepIntegration(t,A,X,K_tilde,M_tilde,D_tilde,NodeGrid), tspan, X0);
+[t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,K_tilde,M_tilde,invM_tilde,D_tilde,NodeGrid), tspan, X0);
 
 U_tilde_dyn = Xsol(:,1:(end/2)).';
 U_dyn = zeros(NodeGrid(end,end),length(t));

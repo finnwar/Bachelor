@@ -36,8 +36,8 @@ NumberOfElementsY = 2;
 
 [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY, E, nu, rho);
 
-alpha = 0;
-beta = 0.0001;
+alpha = 0.0001;
+beta = 0.001;
 
 
 D = alpha*K+beta*M;

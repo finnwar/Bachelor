@@ -1,4 +1,4 @@
-function dXdt = timeStepIntegration(t,A,X,K,M,D,NodeGrid)
+function dXdt = timeStepIntegration(t,A,X,K,M,Minv,D,NodeGrid)
     
     % Get Boundary conditions
     [U, BoundaryNodes, U_dot, U_ddot] = PositionBoundaryCondition(NodeGrid,t);
@@ -15,5 +15,5 @@ function dXdt = timeStepIntegration(t,A,X,K,M,D,NodeGrid)
     
     
 
-    dXdt = A*X + [zeros(size(f_tilde)); f_tilde];
+    dXdt = A*X + [zeros(size(f_tilde)); Minv*f_tilde];
 end
