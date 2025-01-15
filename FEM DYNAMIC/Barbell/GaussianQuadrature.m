@@ -32,8 +32,8 @@ for e=1:TotalNumberOfElements
 
             J = [dNdxi;dNdeta]*[NodePositionTable(e,1:2:7).' NodePositionTable(e,2:2:8).'];
             detJ = det(J);
-
-            B=B_matrix(xi_vector(i),eta_vector(j),J(1,1),J(1,2),J(2,1),J(2,2));
+            invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
+            B=B_matrix(xi_vector(i),eta_vector(j),invJ(1,1),invJ(2,1),invJ(1,2),invJ(2,2));
             KmatrixElement(:,:,e) = KmatrixElement(:,:,e)+B.'*C*B*t*detJ*xi_weights(i)*eta_weights(j);
             
             N = [N_temp(1) 0 N_temp(2) 0 N_temp(3) 0 N_temp(4) 0;
