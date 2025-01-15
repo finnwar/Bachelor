@@ -7,25 +7,26 @@ function [U_Boundary, affectedNodes, U_dot,U_ddot] = PositionBoundaryCondition(N
     U_ddot = zeros(size(U_Boundary));
     % Motion function of forced movement
     
-    amplitude = 0.1; %[m]
+    amplitude = 0.001; %[m]
     frequency = 1;   %[Hz]
     phase = 0;  %[s]
 
-    Position = @(t) amplitude*sin(2*pi*frequency*t-phase);
-    Velocity = @(t) amplitude*2*pi*frequency*cos(2*pi*frequency*t-phase);
-    Acceleration = @(t) -amplitude*4*pi^2*frequency^2*sin(2*pi*frequency*t-phase);
+    Position = amplitude*sin(2*pi*frequency*t-phase);
+    Velocity = amplitude*2*pi*frequency*cos(2*pi*frequency*t-phase);
+    Acceleration = -amplitude*4*pi^2*frequency^2*sin(2*pi*frequency*t-phase);
 
     % Left side x-Displacement
-    
-    U_Boundary(NodeGrid(1,:)) = Position(t);
-    U_dot(NodeGrid(1,:)) = Velocity(t);
-    U_ddot(NodeGrid(1,:)) = Acceleration(t);
-    % Left side y displacement
-    
-    U_Boundary(NodeGrid(2,:)) = 0;
-    U_dot(NodeGrid(2,:)) = 0;
-    U_ddot(NodeGrid(2,:)) = 0;
-    
+    for i = 1:length(NodeGrid(1,:))
+
+        U_Boundary(NodeGrid(1,i)) = Position;
+        U_dot(NodeGrid(1,i)) = Velocity;
+        U_ddot(NodeGrid(1,i)) = Acceleration;
+        % Left side y displacement
+        
+        U_Boundary(NodeGrid(2,i)) = 0;
+        U_dot(NodeGrid(2,i)) = 0;
+        U_ddot(NodeGrid(2,i)) = 0;
+    end
     
     affectedNodes = [NodeGrid(1,:) NodeGrid(2,:)];
     

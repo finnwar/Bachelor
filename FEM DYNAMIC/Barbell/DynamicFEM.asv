@@ -20,7 +20,7 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
     M_tilde(:,BoundaryNodes) = [];
     M_tilde(BoundaryNodes,:) = [];
 
-
+    invM_tilde = inv(M_tilde);
 tspan = [0 1];
 
 A = [zeros(size(K_tilde)) eye(size(K_tilde));
@@ -35,16 +35,19 @@ X0 = [u0;u_dot0];
 A = [zeros(size(K_tilde)) eye(size(K_tilde)); -M_tilde\K_tilde -M_tilde\D_tilde];
 [t,Xsol] = ode23t(@(t,X) timeStepIntegration(t,A,X,K_tilde,M_tilde,D_tilde,NodeGrid), tspan, X0);
 
-U_dyn = Xsol(:,1:(end/2)).';
-
+U_tilde_dyn = Xsol(:,1:(end/2)).';
+U_dyn = zeros(NodeGrid(end,end),length(t));
     %Reinsert the conditional displacements into displacement vector.
     BoundaryNodes=sort(BoundaryNodes);  %The vector containing the boundary nodes has to be sorted for the following method
-for j = 1:length(t)
-    U_Boundary = PositionBoundaryCondition(NodeGrid,t(j));
-    for i = 1:length(BoundaryNodes)
-       U_dyn = [U_dyn(1:(BoundaryNodes(i)-1),t(j)); U_Boundary(BoundaryNodes(i)); U_dyn((BoundaryNodes(i)):length(U_dyn),t)];
+
+    for j = 1:length(t)
+        U_Boundary = PositionBoundaryCondition(NodeGrid,t(j));
+        temp = U_tilde_dyn(:,j);
+        for i = 1:length(BoundaryNodes)
+            temp = [temp(1:(BoundaryNodes(i)-1)); U_Boundary(BoundaryNodes(i)); temp(BoundaryNodes(i):length(temp))];
+        end
+        U_dyn(:,j)=temp;
     end
-end
 
 
 
