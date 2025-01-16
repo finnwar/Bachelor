@@ -41,7 +41,8 @@ q_dot0 = Phi\u_dot0;
 X0 = [q0;q_dot0];
 
 tspan = [0 1];
-[t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_hat_inv,NodeGrid,K_tilde,M_tilde,D_tilde,Phi.'), tspan, X0);
+opt = odeset('Maxstep',1e-3);
+[t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_hat_inv,NodeGrid,K_tilde,M_tilde,D_tilde,Phi.'), tspan, X0,opt);
 
 
 

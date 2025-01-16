@@ -6,7 +6,7 @@ function [f_cond,affectedNodes] = ForceBoundaryCondition(NodeGrid,t)
     
     % Condition
 
-    maxForce = -100000000; %[N(/m)]
+    maxForce = 1000; %[N(/m)]
     frequency = 10; %[Hz]
     phase = 0; %[-]
 
