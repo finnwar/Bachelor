@@ -25,6 +25,7 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
 %% Solving with Modal Reduction
 NumberOfModes = NodeGrid(end,end)/10;
 
+
 [K_hat, M_hat, D_hat, ~,Phi, ~] = ModalReduction(K_tilde, M_tilde, D_tilde, f_tilde, NumberOfModes);
 M_hat_inv = inv(M_hat);
 A = [zeros(size(K_hat)) eye(size(K_hat));
