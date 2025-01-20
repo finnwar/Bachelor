@@ -7,7 +7,7 @@ f_tilde = f-K*U_Boundary;
 
 f_tilde(BoundaryNodes) = [];
 
-% Eleminate constraints
+% Eliminate constraints
 K_tilde = K;
 K_tilde(:,BoundaryNodes) = [];
 K_tilde(BoundaryNodes,:) = [];
@@ -57,8 +57,6 @@ if nargin > 4
 
 else
     %% Solving without Modal Reduction
-    A = [zeros(size(K_tilde)) eye(size(K_tilde));
-        -M_tilde\K_tilde -M_tilde\D_tilde];
 
     [u0,~,u_dot0] = PositionBoundaryCondition(NodeGrid,0);
 
@@ -68,7 +66,8 @@ else
     %Initial Conditions
     X0 = [u0;u_dot0];
 
-    A = [zeros(size(K_tilde)) eye(size(K_tilde)); -M_tilde\K_tilde -M_tilde\D_tilde];
+    A = [zeros(size(K_tilde)) eye(size(K_tilde));
+        -M_tilde\K_tilde -M_tilde\D_tilde];
 
     %% ODE Solver
     tspan = [0 1];
