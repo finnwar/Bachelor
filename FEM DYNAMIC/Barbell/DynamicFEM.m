@@ -1,4 +1,4 @@
-function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
+function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid, AdditionalModes)
 
     [U_Boundary, BoundaryNodes] = PositionBoundaryCondition(NodeGrid,0);
     [f,~] = ForceBoundaryCondition(NodeGrid,0);
@@ -24,9 +24,9 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
 
 %% Solving with Modal Reduction
 NumberOfModes = NodeGrid(end,end)/10;
+AdditionalModes(BoundaryNodes,:) = [];
 
-
-[K_hat, M_hat, D_hat, ~,Phi, ~] = ModalReduction(K_tilde, M_tilde, D_tilde, f_tilde, NumberOfModes);
+[K_hat, M_hat, D_hat, ~,Phi, ~] = ModalReduction(K_tilde, M_tilde, D_tilde, f_tilde, NumberOfModes, AdditionalModes);
 M_hat_inv = inv(M_hat);
 A = [zeros(size(K_hat)) eye(size(K_hat));
      -M_hat\K_hat -M_hat\D_hat];

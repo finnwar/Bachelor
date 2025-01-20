@@ -24,8 +24,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 4;
-NumberOfElementsY = 2;
+NumberOfElementsX = 100;
+NumberOfElementsY = 20;
 
 
 
@@ -36,20 +36,20 @@ NumberOfElementsY = 2;
 
 [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY, E, nu, rho);
 
-alpha = 0.0001;
-beta = 0.001;
+alpha = 0.00001;
+beta = 0.0001;
 
 
 D = alpha*K+beta*M;
 %% Solve static FEM with boundary conditions
 
-U_static = StaticFEM(K,M,NodeGrid);
-
+U_static = StaticFEM(K,ForceBoundaryCondition(NodeGrid,0),NodeGrid);
+U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 PlotDisplacement(U_static,NodeGrid,NodePosition)
 
 %% Transient response
 
-[t, U_dyn] = DynamicFEM(K,M,D,NodeGrid);
+[t, U_dyn] = DynamicFEM(K,M,D,NodeGrid, [U_static/norm(U_static), U_mass/norm(U_mass)]);
 
 
 

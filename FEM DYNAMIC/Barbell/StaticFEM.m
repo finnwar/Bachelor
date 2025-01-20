@@ -1,8 +1,7 @@
-function [U] = StaticFEM (K,M,NodeGrid)
+function [U] = StaticFEM (K,f,NodeGrid)
     
     [U_Boundary, ConstrainedNodes] = PositionBoundaryCondition(NodeGrid,0);
-    [f,~] = ForceBoundaryCondition(NodeGrid,0);
-    
+        
     f_tilde = f-K*U_Boundary;
     
     f_tilde(ConstrainedNodes) = [];
