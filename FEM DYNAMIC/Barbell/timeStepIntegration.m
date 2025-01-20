@@ -11,9 +11,12 @@ function dXdt = timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid, K,M,D,transposed
     f(BoundaryNodes) = [];
 
     f_tilde = f-K*U-D*U_dot-M*U_ddot;
-    
-    f_hat = transposedPhi*f_tilde;
-    
+    if nargin == 9
+        f_hat = transposedPhi*f_tilde;
+    else
+        f_hat = f_tilde;
+    end
 
+    
     dXdt = A*X + [zeros(size(f_hat)); M_tilde_inv*f_hat];
 end

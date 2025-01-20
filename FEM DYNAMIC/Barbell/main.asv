@@ -55,9 +55,9 @@ PlotDisplacement(U_static,NodeGrid,NodePosition)
 [t_modal10add, U_dyn_modal10add] = DynamicFEM(K,M,D,NodeGrid,10, [U_static/norm(U_static), U_mass/norm(U_mass)]);
 
 [t_modal10Ker, U_dyn_modal10Ker] = DynamicFEM(K,M,D,NodeGrid,10, null(K));
-[t_modal40Ker, U_dyn_modal40Ker] = DynamicFEM(K,M,D,NodeGrid,40, null(K));
+[t_modal40Ker, U_dyn_modal40Ker] = DynamicFEM(K,M,D,NodeGrid,10, /norm(U_mass)]);
 
 
 
-%[t_direct, U_dyn_direct] = DynamicFEM(K,M,D,NodeGrid);
+[t_direct, U_dyn_direct] = DynamicFEM(K,M,D,NodeGrid);
 
