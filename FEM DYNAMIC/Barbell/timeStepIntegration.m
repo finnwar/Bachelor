@@ -1,22 +1,20 @@
 function dXdt = timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid, K,M,D,transposedPhi)
     
     % Get Boundary conditions
-    [U, BoundaryNodes, U_dot, U_ddot] = PositionBoundaryCondition(NodeGrid,t);
+    [U_b, BoundaryNodes, U_b_dot, U_b_ddot] = PositionBoundaryCondition(NodeGrid,t);
     [f,~] = ForceBoundaryCondition(NodeGrid,t);
     
     % Reduce to eliminate bound degrees of freedom
-    U(BoundaryNodes) = [];
-    U_dot(BoundaryNodes) = [];
-    U_ddot(BoundaryNodes) = [];
+    U_b(BoundaryNodes) = [];
+    U_b_dot(BoundaryNodes) = [];
+    U_b_ddot(BoundaryNodes) = [];
     f(BoundaryNodes) = [];
 
-    f_tilde = f-K*U-D*U_dot-M*U_ddot;
+    f_tilde = f-K*U_b-D*U_b_dot-M*U_b_ddot;
     if nargin == 9
-        f_hat = transposedPhi*f_tilde;
-    else
-        f_hat = f_tilde;
+        f_tilde = transposedPhi*f_tilde;
     end
 
     
-    dXdt = A*X + [zeros(size(f_hat)); M_tilde_inv*f_hat];
+    dXdt = A*X + [zeros(size(f_tilde)); M_tilde_inv*f_tilde];
 end

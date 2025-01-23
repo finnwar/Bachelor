@@ -9,7 +9,7 @@ function [K_tilde, M_tilde, D_tilde, f_tilde,Phi, eigenFrequencies] = ModalReduc
     
         % Modal redcution with eigenmodes
         Phi = [eigenVectors(:,1:NumberOfModes)];
-    
+        Phi = Phi./vecnorm(Phi);
         M_tilde = Phi.'*M*Phi;
         K_tilde = Phi.'*M*Phi;
         D_tilde = Phi.'*D*Phi;

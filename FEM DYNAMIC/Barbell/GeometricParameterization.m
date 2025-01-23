@@ -1,6 +1,5 @@
 %%Function to find parameters of the function describing the part geometry
-% The curve is described by a degree 4 polynomial of the form
-% f(x)=ax^4+bx^3+cx^2+dx+e
+% The curve is described by sinusoidal interpolation
 function factors = GeometricParameterization(length_end, thickness_end, thickness_middle)
     A = [1 0 1 0 1; 1 sin(length_end) cos(length_end) sin(2*length_end) cos(2*length_end); 
         1 sin(2*length_end) cos(2*length_end) sin(4*length_end) cos(4*length_end);

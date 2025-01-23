@@ -3,7 +3,7 @@
 
 %Simulation eines einfachen Stabes mithilfe einer 2D-FEM
 
-[K, M, f, U] = Static_FEM;
+[K, M, f, U] = Static_FEM(4,2);
 
 %Eigenmdoes
 [eigenVectors,eigenFrequencies] = eig(K,M,'vector');

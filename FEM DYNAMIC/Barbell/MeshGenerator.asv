@@ -15,17 +15,17 @@ function [DoFGrid, DoFTable, NodePosition, NodePositionTable, Vertices] = MeshGe
         end
     end
 
-    % vertices = zeros(NumberOfElementsX*NumberOfElementsY,4);
-    % 
-    % for i = 1:(NumberOfElementsX)
-    %     for j = 1:(NumberOfElementsY)
-    %         vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),1) = vertexGrid(i,j);
-    %         vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),2) = NodeGrid(i+1,j);
-    %         vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),3) = NodeGrid(i+1,j);
-    %         vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),4) = NodeGrid(i+1,j+1);
-    % 
-    %     end
-    % end
-    % 
+    vertices = zeros(NumberOfElementsX*NumberOfElementsY,4);
+
+    for i = 1:(NumberOfElementsX)
+        for j = 1:(NumberOfElementsY)
+            vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),1) = vertexGrid();
+            vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),2) = NodeGrid(2*i,j);
+            vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),3) = NodeGrid(2*i+1,j);
+            vertices(sub2ind([NumberOfElementsX,NumberOfElementsY],i,j),4) = NodeGrid(2*i+2,j);
+      
+        end
+    end
+
 
 end

@@ -70,7 +70,7 @@ else
         -M_tilde\K_tilde -M_tilde\D_tilde];
 
     %% ODE Solver
-    tspan = [0 1];
+    tspan = [0 10];
     [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid,K_tilde,M_tilde,D_tilde), tspan, X0);
 
     % Post-Processing
@@ -80,19 +80,8 @@ else
 
 end
 
-U_dyn = zeros(NodeGrid(end,end),length(t));
-%Reinsert the conditional displacements into displacement vector.
-BoundaryNodes=sort(BoundaryNodes);  %The vector containing the boundary nodes has to be sorted for the following method
-
-for j = 1:length(t)
-    U_Boundary = PositionBoundaryCondition(NodeGrid,t(j));
-    temp = U_tilde_dyn(:,j);
-    for i = 1:length(BoundaryNodes)
-        temp = [temp(1:(BoundaryNodes(i)-1)); U_Boundary(BoundaryNodes(i)); temp(BoundaryNodes(i):length(temp))];
-    end
-    U_dyn(:,j)=temp;
-end
-
+U_dyn = BoundaryReinsertion(NodeGrid, t, BoundaryNodes, U_tilde_dyn);
+% U_dyn_dot = BoundaryReinsertion(NodeGrid,t,BoundaryNodes,Xsol(:,(end/2+1):end),)
 
 
 end

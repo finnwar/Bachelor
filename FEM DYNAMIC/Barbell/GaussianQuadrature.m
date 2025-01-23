@@ -1,10 +1,10 @@
 %Gaussian Quadrature to generate stiffness and mass matrices
 
-function [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY, E, nu, rho)
+function [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY,thickness, E, nu, rho)
 
 TotalNumberOfElements = NumberOfElementsX*NumberOfElementsY;
 NumberOfNodes = (NumberOfElementsX+1)*(NumberOfElementsY+1);
-    t = 1; 
+    thickness = 0.1; 
     
     C = E/(1-nu^2)*[1 nu 0;...
                      nu 1 0;...
@@ -34,12 +34,12 @@ for e=1:TotalNumberOfElements
             detJ = det(J);
             invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
             B=B_matrix(xi_vector(i), eta_vector(j), invJ(1,1), invJ(2,1), invJ(1,2), invJ(2,2));
-            KmatrixElement(:,:,e) = KmatrixElement(:,:,e)+B.'*C*B*t*detJ*xi_weights(i)*eta_weights(j);
+            KmatrixElement(:,:,e) = KmatrixElement(:,:,e)+B.'*C*B*thickness*detJ*xi_weights(i)*eta_weights(j);
             
             N = [N_temp(1) 0 N_temp(2) 0 N_temp(3) 0 N_temp(4) 0;
                  0 N_temp(1) 0 N_temp(2) 0 N_temp(3) 0 N_temp(4)];
 
-            elementMassMatrix(:,:,e) = elementMassMatrix(:,:,e) + rho * (N.')*N*detJ*t*xi_weights(i)*eta_weights(j);
+            elementMassMatrix(:,:,e) = elementMassMatrix(:,:,e) + rho * (N.')*N*detJ*thickness*xi_weights(i)*eta_weights(j);
         end
     end
 end
