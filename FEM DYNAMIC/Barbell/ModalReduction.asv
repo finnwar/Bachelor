@@ -1,4 +1,4 @@
-function [Omega, Phi, D_tilde, D_bar, M_bar] = ModalReduction(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
+function [Omega, Phi, D_tilde, D_bar, M_bar] = ModalReduction(K,M,D,NumberOfModes, AdditionalModesn, NodeGrid)
     
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
     
@@ -25,8 +25,9 @@ function [Omega, Phi, D_tilde, D_bar, M_bar] = ModalReduction(K,M,D,NumberOfMode
 
     [Omega, ind] = sort(Omega);
     Phi = Phi(:, ind);
-    Phi = [Phi(1:NumberOfModes), AdditionalModes];
-    Omega = Phi.'*K_FF*Phi;
+    Omega = diag(Omega);
+    Phi = Phi(1:NumberOfModes);
+    Omega = Omega(1:NumberOfModes,1:)
     % Calculate Matrices
     D_tilde = Phi.'*D_FF*Phi;
 

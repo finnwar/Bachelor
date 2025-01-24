@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 4;
-NumberOfElementsY = 2;
+NumberOfElementsX = 1;
+NumberOfElementsY = 1;
 
 
 

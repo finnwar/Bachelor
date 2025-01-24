@@ -1,16 +1,7 @@
-function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
+function [t, U_dyn] = DynamicModalFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
 
 [U_boundary, boundaryNodes,~,~] = PositionBoundaryCondition(NodeGrid,0);
 boundaryNodes = sort(boundaryNodes);
-
-% Reconfiguration of matrices
-% [ A_bb A_bf;
-%   A_fb A_ff]
-K_tilde = MatrixReconfiguration(K, boundaryNodes);
-
-M_tilde = MatrixReconfiguration(M, boundaryNodes);
-
-D_tilde = MatrixReconfiguration(D, boundaryNodes);
 
 
 
