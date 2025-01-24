@@ -3,14 +3,14 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
 [U_boundary, boundaryNodes,~,~] = PositionBoundaryCondition(NodeGrid,0);
 boundaryNodes = sort(boundaryNodes);
 
-M_tilde = zeros(size(M));
+% Reconfiguration of matrices
+% [ A_bb A_bf;
+%   A_fb A_ff]
+K_tilde = MatrixReconfiguration(K, boundaryNodes);
 
-M_tilde(1:length(boundaryNodes),:) = M(boundaryNodes,:);
-M_tilde(:,1:length(boundaryNodes)) = M(:,boundaryNodes);
-M_tilde((length(boundaryNodes)+1):end,:) = M(setdiff(1:length(M(1,:)),boundaryNodes),:);
-M_tilde(:,(length(boundaryNodes)+1):end) = M(:,setdiff(1:length(M(1,:)),boundaryNodes));
+M_tilde = MatrixReconfiguration(M, boundaryNodes);
 
-
+D_tilde = MatrixReconfiguration(D, boundaryNodes);
 
 
 
