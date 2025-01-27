@@ -1,4 +1,4 @@
-function dXdt = ModalTimeStepIntegration(t,A,X,transposedPhi,M_tilde_ie,D_tilde_ie,K_tilde_ie,NodeGrid)
+function dXdt = ModalTimeStepIntegration(t,A,X,transposedPhi,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,NodeGrid)
     
     % Get Boundary conditions
     [U_b, BoundaryNodes, U_b_dot, U_b_ddot] = PositionBoundaryCondition(NodeGrid,t);
@@ -12,5 +12,5 @@ function dXdt = ModalTimeStepIntegration(t,A,X,transposedPhi,M_tilde_ie,D_tilde_
 
     f_tilde = transposedPhi*f - M_tilde_ie*U_b_ddot - D_tilde_ie*U_b_dot - K_tilde_ie*U_b;
     
-    dXdt = A*X + [zeros(size(f_tilde));f_tilde];
+    dXdt = A*X + [zeros(size(f_tilde));invM_tilde_ii*f_tilde];
 end
