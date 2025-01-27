@@ -1,4 +1,4 @@
-function [A_tilde, A_ee, A_ei, A_ie, A_ii] = MatrixReconfiguration(A, boundaryNodes)
+function A_tilde = MatrixReconfiguration(A, boundaryNodes)
 
 
 A_ii= A;
