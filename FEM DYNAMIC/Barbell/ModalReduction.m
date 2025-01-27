@@ -1,4 +1,4 @@
-function [K_tilde, M_tilde, D_tilde, f_tilde,Phi, eigenFrequencies] = ModalReduction(K,M,D,f,NumberOfModes, AdditionalModes)
+function [K_tilde, M_tilde, D_tilde, f_tilde,Phi, Omega] = ModalReduction(K,M,D,f,NumberOfModes, AdditionalModes)
 
     if nargin == 5
         %Calculate eigenmodes and frequencies
@@ -30,9 +30,10 @@ function [K_tilde, M_tilde, D_tilde, f_tilde,Phi, eigenFrequencies] = ModalReduc
         K_tilde = Phi.'*M*Phi;
         D_tilde = Phi.'*D*Phi;
         f_tilde = Phi.'*f;
-    
-    end
+        
 
+    end
+        Omega = diag(eigenFrequencies);
 
 
 

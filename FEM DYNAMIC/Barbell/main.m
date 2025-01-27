@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 4;
-NumberOfElementsY = 2;
+NumberOfElementsX = 20;
+NumberOfElementsY = 5;
 
 
 
@@ -49,8 +49,8 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % PlotDisplacement(U_static,NodeGrid,NodePosition)
 
 %% Transient response
-[t_modal10, U_dyn_modal10] = DynamicFEM(K,M,D,NodeGrid,10);
-disp('Modal10')
+% [t_modal10, U_dyn_modal10] = DynamicFEM(K,M,D,NodeGrid,10);
+% disp('Modal10')
 % [t_modal40, U_dyn_modal40] = DynamicFEM(K,M,D,NodeGrid,10);
 % disp('Modal40')
 % [t_modal40add, U_dyn_modal40add] = DynamicFEM(K,M,D,NodeGrid,40, [U_static/norm(U_static), U_mass/norm(U_mass)]);
@@ -61,7 +61,7 @@ disp('Modal10')
 % disp('Modal10Ker')
 % [t_modal40Ker, U_dyn_modal40Ker] = DynamicFEM(K,M,D,NodeGrid,40, null(K));
 % disp('Modal40Ker')
-% 
+
 [~,posBoundNodes,~] = PositionBoundaryCondition(NodeGrid,0);
 
 [t_modalFull, U_dyn_modalFull] = DynamicFEM(K,M,D,NodeGrid,NodeGrid(end,end)-length(posBoundNodes));
