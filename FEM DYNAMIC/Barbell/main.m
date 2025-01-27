@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 20;
-NumberOfElementsY = 5;
+NumberOfElementsX = 50;
+NumberOfElementsY = 8;
 
 
 
@@ -62,13 +62,14 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % [t_modal40Ker, U_dyn_modal40Ker] = DynamicFEM(K,M,D,NodeGrid,40, null(K));
 % disp('Modal40Ker')
 
-[~,posBoundNodes,~] = PositionBoundaryCondition(NodeGrid,0);
-
-[t_modalFull, U_dyn_modalFull] = DynamicFEM(K,M,D,NodeGrid,NodeGrid(end,end)-length(posBoundNodes));
+% [~,posBoundNodes,~] = PositionBoundaryCondition(NodeGrid,0);
+% 
+% [t_modalFull, U_dyn_modalFull] = DynamicFEM(K,M,D,NodeGrid,NodeGrid(end,end)-length(posBoundNodes));
 % disp('ModalFull')
 [t_direct, U_dyn_direct] = DynamicFEM(K,M,D,NodeGrid);
 disp('Direct')
 
+[stress_node,stress_abscissae] = StressCalculation(U_dyn_direct,t_direct,nu,E,NodePositionTable,NodeTable);
 
 
 
