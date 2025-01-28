@@ -4,6 +4,7 @@ function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = ModalReduction(K,M,D,N
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
     nFreeNodes = nno-length(boundNodes);
     nBroundNodes = length(boundNodes);
+    
     %     Reconfiguration of matrices
     % [ A_ee A_ei;
     %   A_ie A_ii]
@@ -13,10 +14,10 @@ function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = ModalReduction(K,M,D,N
     
     % Eigenmodes of the free system
 
-    [Phi, Omega] = eig(K_ii,M_ii,'vector');
-
-    [Omega, ind] = sort(Omega);
-    Phi = Phi(:, ind);
+    [Phi, ~] = eigs(K_ii,M_ii,NumberOfModes,'smallestabs');
+    % 
+    % [Omega, ind] = sort(Omega);
+    % Phi = Phi(:, ind);
     Phi = [Phi(:,1:NumberOfModes), AdditionalModes];
 
    
