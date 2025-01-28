@@ -8,7 +8,7 @@ length_total = 0.400;     %Barbell length [m]
 length_middle = 0.200;    %Middle part length [m]
 length_end = (length_total-length_middle)/2;
 
-thickness = 0.1;
+thickness = 0.01;
 
 thickness_end = 0.2;    %Thickness of both ends [m]
 thickness_middle = 0.1;   %Thickness of thin middle part [m]
@@ -26,7 +26,7 @@ g = 9.81;       %Gravitational constant [m/s^2]
 % Mesh-Resolution
 
 
-NumberOfElementsX = 100;
+NumberOfElementsX = 40;
 NumberOfElementsY = 20;
 
 
@@ -56,8 +56,10 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 
 %% Transient response
 
-[t, U_dyn] = DynamicModalFEM(K,M,D,NodeGrid,200,[]);
+[t_dir, U_dyn_dir] = DynamicFEM(K,M,D,NodeGrid);
+[t_mod, U_dyn_mod] = DynamicCMSFEM(K,M,D,NodeGrid,8,[]);
 
+[nodeStress_dir, abscissaStress_dir] = StressCalculation(U_dyn_dir,t_dir,nu,E,NodePositionTable,NodeTable);
 
-
+[nodeStress_mod, abscissaStress_mod] = StressCalculation(U_dyn_mod,t_mod,nu,E,NodePositionTable,NodeTable);
 

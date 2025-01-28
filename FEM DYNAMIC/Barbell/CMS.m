@@ -1,5 +1,5 @@
 
-function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = ModalReduction(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
+function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
     nno = NodeGrid(end,end);
 
 

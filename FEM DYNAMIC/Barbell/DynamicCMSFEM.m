@@ -1,9 +1,9 @@
-function [t, U_dyn] = DynamicModalFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
+function [t, U_dyn] = DynamicCMSFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
 
 [U_0, boundaryNodes,U_0_dot,~] = PositionBoundaryCondition(NodeGrid,0);
 boundaryNodes = sort(boundaryNodes);
 
-[V_cms,Phi, M_tilde,D_tilde,K_tilde,K_ii_invK_ie] = ModalReduction(K,M,D,NumberOfModes,AdditionalModes,NodeGrid);
+[V_cms,Phi, M_tilde,D_tilde,K_tilde,K_ii_invK_ie] = CMS(K,M,D,NumberOfModes,AdditionalModes,NodeGrid);
 
 
 [M_tilde, M_tilde_ee, M_tilde_ei, M_tilde_ie, M_tilde_ii]= MatrixReconfiguration(M_tilde, 1:length(boundaryNodes));
@@ -30,7 +30,8 @@ q_0_dot(1:length(boundaryNodes)) = [];
 
 invM_tilde_ii = inv(M_tilde_ii);
 t_span = [0 10];
-[t, X] = ode15s(@(t,X) ModalTimeStepIntegration(t,A,X,Phi.',invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,NodeGrid),t_span,[q_0;q_0_dot]);
+opt = odeset('MaxStep',1e-3);
+[t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,Phi.',invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,NodeGrid),t_span,[q_0;q_0_dot]);
 
 
 

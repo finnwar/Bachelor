@@ -1,4 +1,4 @@
-function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
+function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
 
 [U_Boundary, BoundaryNodes] = PositionBoundaryCondition(NodeGrid,0);
 [f,~] = ForceBoundaryCondition(NodeGrid,0);
@@ -36,8 +36,9 @@ M_tilde_inv = inv(M_tilde);
         -M_tilde\K_tilde -M_tilde\D_tilde];
 
     %% ODE Solver
+    opt = odeset('MaxStep',1e-3);
     tspan = [0 10];
-    [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid,K_tilde,M_tilde,D_tilde), tspan, X0);
+    [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid,K_tilde,M_tilde,D_tilde), tspan, X0,opt);
 
     % Post-Processing
 
