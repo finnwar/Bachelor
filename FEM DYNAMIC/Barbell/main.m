@@ -25,6 +25,7 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
+
 NumberOfElementsX = 100;
 NumberOfElementsY = 20;
 
@@ -54,7 +55,9 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % PlotDisplacement(U_static,NodeGrid,NodePosition)
 
 %% Transient response
+
 [t, U_dyn] = DynamicModalFEM(K,M,D,NodeGrid,200,[]);
+
 
 
 

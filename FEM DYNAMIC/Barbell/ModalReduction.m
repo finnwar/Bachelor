@@ -1,5 +1,7 @@
+
 function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = ModalReduction(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
     nno = NodeGrid(end,end);
+
 
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
     nFreeNodes = nno-length(boundNodes);
@@ -22,10 +24,11 @@ function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = ModalReduction(K,M,D,N
 
    
     % Calculate Matrices
-    
+
     invK_iiKie = K_ii\K_ie;
     V_cms = [eye(nBroundNodes) zeros(nBroundNodes,length(Phi(1,:)));
              -invK_iiKie Phi];
+
 
     M_tilde = V_cms.'*M*V_cms;
     D_tilde = V_cms.'*D*V_cms;
