@@ -1,9 +1,14 @@
 %% Visualisation
+function PatchPlot(Title,U,t,nodeStress,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+
+
+
 
 % defines vertices
 tmp = NodePosition(:).';
-U = U_static(:,end);
-verts = [tmp(1:2:end).'+U(1:2:end), tmp(2:2:end).'+U(2:2:end)];
+
+verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+U(2:2:end,1)];
 
 
 
@@ -18,51 +23,34 @@ vertStress = zeros(length(verts(:,1)),1);
 for e = 1:(NumberOfElementsY*NumberOfElementsX)
         vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,1).';
 end
-verts = [tmp(1:2:end).'+U(1:2:end), tmp(2:2:end).'+ U(2:2:end)];
+verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+ U(2:2:end,1)];
 
 
 
 % create patch object
+figure
 pObj = patch('vertices', verts, 'faces', faces, 'FaceVertexCData',vertStress,'FaceColor','interp')
-
-
-
-%% Animation the Direct Solver
-for ii=1:length(t_dir)
+title(Title)
+xlabel('x')
+ylabel('y')
+colorbar
+for ii=1:length(t)
     %  determine displacement    
-    U = U_dyn_dir(:,ii);
-    verts = [tmp(1:2:end).'+1000*U(1:2:end), tmp(2:2:end).'+ 1000*U(2:2:end)];
+    
+    verts = [tmp(1:2:end).'+1000*U(1:2:end,ii), tmp(2:2:end).'+ 1000*U(2:2:end,ii)];
     
     
     for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress_dir(e,:,ii).';
+        vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,ii).';
     end
 
     % update vertice position
     set(pObj, 'vertices', verts, 'FaceVertexCData',vertStress);
 
     % update patch object
-    drawnow;
-    pause(t_dir(ii+1)-t_dir(ii))
-end
-
-%% Animation of the CMS Solver
-
-for ii=1:length(t_mod)
-    %  determine displacement    
-    U = U_dyn_dir(:,ii);
-    verts = [tmp(1:2:end).'+1000*U(1:2:end), tmp(2:2:end).'+ 1000*U(2:2:end)];
-    
-    
-    for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress_mod(e,:,ii).';
+    drawnow limitrate;
+    if ii < length(t)
+        pause(t(ii+1)-t(ii))
     end
-
-    % update vertice position
-    set(pObj, 'vertices', verts, 'FaceVertexCData',vertStress);
-
-    % update patch object
-    drawnow;
-    pause(t_dir(ii+1)-t_dir(ii))
 end
-
+end

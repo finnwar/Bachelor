@@ -30,13 +30,13 @@ function [sigma_node, sigma_abscissae] = StressCalculation(U,t,nu,E,NodePosition
     
                     sigma_node(e, i+2*(j-1),T) = vecnorm(C*B*elementDisplacement(e,:,T).');
     
-                    [~,dNdxi,dNdeta] = ShapeFunctions(xi_vector(i),eta_vector(j));
-                    J = [dNdxi;dNdeta]*[NodePositionTable(e,1:2:7).' NodePositionTable(e,2:2:8).'];
-                    detJ = det(J);
-                    invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
-                    B=B_matrix(xi_vector(i), eta_vector(j), invJ(1,1), invJ(2,1), invJ(1,2), invJ(2,2));
-    
-                    sigma_abscissae(e, i+2*(j-1),T) = vecnorm(C*B*elementDisplacement(e,:,T).');
+                    % [~,dNdxi,dNdeta] = ShapeFunctions(xi_vector(i),eta_vector(j));
+                    % J = [dNdxi;dNdeta]*[NodePositionTable(e,1:2:7).' NodePositionTable(e,2:2:8).'];
+                    % detJ = det(J);
+                    % invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
+                    % B=B_matrix(xi_vector(i), eta_vector(j), invJ(1,1), invJ(2,1), invJ(1,2), invJ(2,2));
+                    % 
+                    % sigma_abscissae(e, i+2*(j-1),T) = vecnorm(C*B*elementDisplacement(e,:,T).');
     
                 end
             end

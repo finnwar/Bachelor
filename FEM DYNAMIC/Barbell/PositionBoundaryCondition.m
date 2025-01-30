@@ -13,7 +13,7 @@ function [U_Boundary, affectedNodes, U_dot,U_ddot] = PositionBoundaryCondition(N
 
     Position = amplitude*sin(2*pi*frequency*t-phase);
     Velocity = amplitude*2*pi*frequency*cos(2*pi*frequency*t-phase);
-    Acceleration = -amplitude*4*pi^2*frequency^2*sin(2*pi*frequency*t-phase);
+    Acceleration =amplitude*4*pi^2*frequency^2*sin(2*pi*frequency*t-phase);
 
 
     for i = 1:length(NodeGrid(1,:))

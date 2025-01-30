@@ -10,7 +10,11 @@ boundaryNodes = sort(boundaryNodes);
 [D_tilde, D_tilde_ee, D_tilde_ei, D_tilde_ie, D_tilde_ii]= MatrixReconfiguration(D_tilde, 1:length(boundaryNodes));
 [K_tilde, K_tilde_ee, K_tilde_ei, K_tilde_ie, K_tilde_ii]= MatrixReconfiguration(K_tilde, 1:length(boundaryNodes));
 
-
+invM_tilde_ii = inv(M_tilde_ii);
+invM_tildetransposedPhi = invM_tilde_ii*Phi.';
+invM_tildeM_tilde_ie = invM_tilde_ii*M_tilde_ie;
+invM_tildeD_tilde_ie = invM_tilde_ii*D_tilde_ie;
+invM_tildeK_tilde_ie = invM_tilde_ii*K_tilde_ie;
 
 A = [zeros(size(K_tilde_ii)) eye(size(K_tilde_ii));
      -M_tilde_ii\K_tilde_ii -M_tilde_ii\D_tilde_ii];
@@ -28,10 +32,10 @@ q_0(1:length(boundaryNodes)) = [];
 q_0_dot = V_cms\U_0_dot;
 q_0_dot(1:length(boundaryNodes)) = [];
 
-invM_tilde_ii = inv(M_tilde_ii);
+
 t_span = [0 10];
-opt = odeset('MaxStep',1e-3);
-[t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,Phi.',invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,NodeGrid),t_span,[q_0;q_0_dot]);
+opt = odeset('MaxStep',1e-1);
+[t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tildetransposedPhi,invM_tildeM_tilde_ie,invM_tildeD_tilde_ie,invM_tildeK_tilde_ie,NodeGrid),t_span,[q_0;q_0_dot],opt);
 
 
 

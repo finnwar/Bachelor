@@ -1,12 +1,11 @@
 
 function [V_cms,Phi,M_tilde,D_tilde,K_tilde,invK_iiKie] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
     nno = NodeGrid(end,end);
-
+    
 
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
     nFreeNodes = nno-length(boundNodes);
     nBroundNodes = length(boundNodes);
-    
     %     Reconfiguration of matrices
     % [ A_ee A_ei;
     %   A_ie A_ii]

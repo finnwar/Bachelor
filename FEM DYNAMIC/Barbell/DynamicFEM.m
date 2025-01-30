@@ -3,42 +3,33 @@ function [t, U_dyn] = DynamicFEM(K,M,D,NodeGrid)
 [U_Boundary, BoundaryNodes] = PositionBoundaryCondition(NodeGrid,0);
 [f,~] = ForceBoundaryCondition(NodeGrid,0);
 
-f_tilde = f-K*U_Boundary;
+[M,M_ee, M_ei,M_ie, M_ii] = MatrixReconfiguration(M,BoundaryNodes);
 
-f_tilde(BoundaryNodes) = [];
+[K,K_ee, K_ei,K_ie, K_ii] = MatrixReconfiguration(K,BoundaryNodes);
 
-% Eliminate constraints
-K_tilde = K;
-K_tilde(:,BoundaryNodes) = [];
-K_tilde(BoundaryNodes,:) = [];
+[D,D_ee, D_ei,D_ie, D_ii] = MatrixReconfiguration(D,BoundaryNodes);
 
-D_tilde = D;
-D_tilde(:,BoundaryNodes) = [];
-D_tilde(BoundaryNodes,:) = [];
-
-M_tilde = M;
-M_tilde(:,BoundaryNodes) = [];
-M_tilde(BoundaryNodes,:) = [];
-
-M_tilde_inv = inv(M_tilde);
-
+M_ii_inv = inv(M_ii);
+M_ii_invK_ie = M_ii_inv*K_ie;
+M_ii_invD_ie = M_ii_inv*D_ie;
+M_ii_invM_ie = M_ii_inv*M_ie;
     %% Solving without Modal Reduction
 
-    [u0,~,u_dot0] = PositionBoundaryCondition(NodeGrid,0);
+    [u_i0,~,u_i_dot0] = PositionBoundaryCondition(NodeGrid,0);
 
-    u0(BoundaryNodes) = [];
-    u_dot0(BoundaryNodes) = [];
+    u_i0(BoundaryNodes) = [];
+    u_i_dot0(BoundaryNodes) = [];
 
     %Initial Conditions
-    X0 = [u0;u_dot0];
+    X0 = [u_i0;u_i_dot0];
 
-    A = [zeros(size(K_tilde)) eye(size(K_tilde));
-        -M_tilde\K_tilde -M_tilde\D_tilde];
+    A = [zeros(size(K_ii)) eye(size(K_ii));
+        -M_ii\K_ii -M_ii\D_ii];
 
     %% ODE Solver
-    opt = odeset('MaxStep',1e-3);
+    opt = odeset('MaxStep',1e-1);
     tspan = [0 10];
-    [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_tilde_inv,NodeGrid,K_tilde,M_tilde,D_tilde), tspan, X0,opt);
+    [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_ii_inv,M_ii_invK_ie,M_ii_invD_ie,M_ii_invM_ie,NodeGrid), tspan, X0,opt);
 
     % Post-Processing
 
