@@ -1,4 +1,4 @@
-function dXdt = CMSTimeStepIntegration(t,A,X,transposedPhi,invM_ii,B_M,B_D,B_K,NodeGrid)
+function dXdt = CMSTimeStepIntegration(t,A,X,transposedPhi,invM_tilde_ii,B_M,B_D,B_K,NodeGrid)
     
     % Get Boundary conditions
     [U_e, BoundaryNodes, U_e_dot, U_e_ddot] = PositionBoundaryCondition(NodeGrid,t);
@@ -10,7 +10,7 @@ function dXdt = CMSTimeStepIntegration(t,A,X,transposedPhi,invM_ii,B_M,B_D,B_K,N
     U_e_ddot = U_e_ddot(BoundaryNodes);
     f(BoundaryNodes) = [];
 
-    f_tilde = transposedPhi*(f-B_M*U_e_ddot-B_D*U_e_dot-B_K*U_e);
+    f_tilde = invM_tilde_ii*transposedPhi*(f-B_M*U_e_ddot-B_D*U_e_dot-B_K*U_e);
     
-    dXdt = invM_ii*(A*X + [zeros(size(f_tilde));f_tilde]);
+    dXdt = (A*X + [zeros(size(f_tilde));f_tilde]);
 end
