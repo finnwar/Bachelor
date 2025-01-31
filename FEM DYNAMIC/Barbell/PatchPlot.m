@@ -34,6 +34,8 @@ title(Title)
 xlabel('x')
 ylabel('y')
 colorbar
+axis('manual');
+axis([-0.25*length_end 1.2*(2*length_end+length_middle) -thickness_end thickness_end])
 for ii=1:length(t)
     %  determine displacement    
     

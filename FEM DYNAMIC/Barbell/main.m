@@ -72,8 +72,12 @@ tic;
 [t_cms4, U_dyn_cms4] = DynamicCMSFEM(K,M,D,NodeGrid,4,[]);
 toc;
 %%
+AdditionalModes= [null(K) ];
+[~,boundNodes] = PositionBoundaryCondition(NodeGrid,1);
+
+AdditionalModes(boundNodes,:) = [];
 tic;
-[t_cms4Ker, U_dyn_cms4Ker] = DynamicCMSFEM(K,M,D,NodeGrid,4,null(K));
+[t_cms4Ker, U_dyn_cms4Ker] = DynamicCMSFEM(K,M,D,NodeGrid,4,AdditionalModes);
 toc;
 %%
 tic;
@@ -114,7 +118,7 @@ PatchPlot('4 Eigenmodes + Ker',U_dyn_cms4Ker,t_cms4Ker,nodeStress_cms4Ker,NodePo
                                             length_end, length_middle, thickness_end, thickness_middle)
 
 %%
-PatchPlot('10 Eigenmode',U_dyn_cms10,t_cms10,nodeStress_cms10,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('10 Eigenmodes',U_dyn_cms10,t_cms10,nodeStress_cms10,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
                                             length_end, length_middle, thickness_end, thickness_middle)
 %%
 
