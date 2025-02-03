@@ -56,6 +56,10 @@ tic;
 toc;
 %%
 tic;
+[t_cms240, U_dyn_cms240] = DynamicCMSFEM(K,M,D,NodeGrid,240,[]);
+toc;
+%%
+tic;
 [t_cms40, U_dyn_cms40] = DynamicCMSFEM(K,M,D,NodeGrid,40,[]);
 toc;
 %%
@@ -86,6 +90,10 @@ toc;
 %% Stress Calculation
 tic;
 [nodeStress_cms1, abscissaStress_cms1] = StressCalculation(U_dyn_cms1,t_cms1,nu,E,NodePositionTable,NodeTable);
+toc;
+%%
+tic;
+[nodeStress_cms240, abscissaStress_cms240] = StressCalculation(U_dyn_cms240,t_cms240,nu,E,NodePositionTable,NodeTable);
 toc;
 %%
 tic;
@@ -121,6 +129,9 @@ PatchPlot('4 Eigenmodes + Ker',U_dyn_cms4Ker,t_cms4Ker,nodeStress_cms4Ker,NodePo
 PatchPlot('10 Eigenmodes',U_dyn_cms10,t_cms10,nodeStress_cms10,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
                                             length_end, length_middle, thickness_end, thickness_middle)
 %%
+PatchPlot('240 Eigenmodes',U_dyn_cms240,t_cms240,nodeStress_cms240,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
+                                            length_end, length_middle, thickness_end, thickness_middle)
+%%
 
 ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms1,t_cms1,'CMS 1')
 ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms4,t_cms4,'CMS 4')
@@ -129,11 +140,15 @@ ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms20,t_cms20,'CMS 20')
 ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms40,t_cms40,'CMS 40')
 
 %%
-[~, MASE(1), ~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms1,U_dyn_cms1);
-[~, MASE(2), ~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms4,U_dyn_cms4);
-[~, MASE(3), ~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms10,U_dyn_cms10);
-[~, MASE(4), ~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
-[~, MASE(5), ~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms40,U_dyn_cms40);
+Mre = zeros(1,6);
+[~, MASE(1), ~,MRE(1)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms1,U_dyn_cms1);
+[~, MASE(2), ~,MRE(2)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms4,U_dyn_cms4);
+[~, MASE(3), ~,MRE(3)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms10,U_dyn_cms10);
+[~, MASE(4), ~,MRE(4)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+[~, MASE(5), ~,MRE(5)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms40,U_dyn_cms40);
+[~, MASE(6), ~,MRE(6)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms240,U_dyn_cms240);
+figure
+loglog([1 4 10 20 40 240],MASE)
 
 figure
-plot([1 4 10 20 40],MASE)
+plot([1 4 10 20 40 240],MRE)

@@ -41,7 +41,6 @@ for ii=1:length(t)
     
     verts = [tmp(1:2:end).'+1000*U(1:2:end,ii), tmp(2:2:end).'+ 1000*U(2:2:end,ii)];
     
-    
     for e = 1:(NumberOfElementsY*NumberOfElementsX)
         vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,ii).';
     end

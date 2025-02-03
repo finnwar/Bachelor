@@ -14,9 +14,9 @@ else
     U_ref = U_interp;
 end
 
-abs_error = abs(vecnorm(U_comp)-vecnorm(U_ref));
+abs_error = vecnorm(U_comp-U_ref);
 
-rel_error = vecnorm(U_comp)./vecnorm(U_ref);
+rel_error = abs((U_comp-U_ref)./U_ref);
 
 mean_abs_error = mean(abs_error);
 
@@ -24,6 +24,6 @@ mean_abs_squared_error = mean(abs_error.^2);
 
 root_mean_squared_error = vecnorm(abs_error);
 
-mean_rel_error = mean(rel_error);
+mean_rel_error = mean(rel_error,'all','omitmissing');
 
 end
