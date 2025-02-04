@@ -1,6 +1,6 @@
 %% Visualisation
-function PatchPlot(Title,U,t,nodeStress,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                                             length_end, length_middle, thickness_end, thickness_middle)
+function PatchPlot(Title,U,t,ElementStress,NodePosition,NodePositionTable,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle,opt)
 
 
 
@@ -17,19 +17,26 @@ verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+U(2:2:end,1)];
 % define faces
 [~, ~, ~, ~, faces] = MeshGenerator(NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle);
-% Calculate Stress at vertices
+% Calculate Stress at points defined in opt
+if opt == 'abscissa'
+    eta = GaussianQuadrature1D(2);
+    xi = GaussianQuadrature1D(2);
+elseif opt == 'node'
+    eta = [-1 1];
+    xi = [-1 1];
+end
 
-vertStress = zeros(length(verts(:,1)),1);
-for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,1).';
+StressFieldNodeGrid = zeros([size(NodePosition(1:2:end,:)) length(t)]);
+for T = 1:length(t)
+    StressFieldNodeGrid(:,:,T) = StressField(ElementStress(:,:,T),NodePositionTable,NodePosition,NumberOfElementsX,NumberOfElementsY,xi,eta);
 end
 verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+ U(2:2:end,1)];
-
+vertStress = StressFieldNodeGrid(:,:,1);
 
 
 % create patch object
 figure
-pObj = patch('vertices', verts, 'faces', faces, 'FaceVertexCData',vertStress,'FaceColor','interp')
+pObj = patch('vertices', verts, 'faces', faces, 'FaceVertexCData',vertStress(:),'FaceColor','interp')
 title(Title)
 xlabel('x')
 ylabel('y')
@@ -41,12 +48,10 @@ for ii=1:length(t)
     
     verts = [tmp(1:2:end).'+1000*U(1:2:end,ii), tmp(2:2:end).'+ 1000*U(2:2:end,ii)];
     
-    for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,ii).';
-    end
+    vertStress = StressFieldNodeGrid(:,:,ii);
 
     % update vertice position
-    set(pObj, 'vertices', verts, 'FaceVertexCData',vertStress);
+    set(pObj, 'vertices', verts, 'FaceVertexCData',vertStress(:));
 
     % update patch object
     drawnow limitrate;

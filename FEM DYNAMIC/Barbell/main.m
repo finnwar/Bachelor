@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 20;
-NumberOfElementsY = 5;
+NumberOfElementsX = 4;
+NumberOfElementsY = 2;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -113,8 +113,8 @@ tic;
 toc;
 %% Visualisation
 
-PatchPlot('Direct Time Integration',U_dyn_dir,t_dir,nodeStress_dir,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
+PatchPlot('Nodal Approach',U_dyn_dir,t_dir,abscissaStress_dir,NodePosition,NodePositionTable,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle,'abscissa')
 %%
 PatchPlot('1 Eigenmode',U_dyn_cms1,t_cms1,nodeStress_cms1,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
                                             length_end, length_middle, thickness_end, thickness_middle)
