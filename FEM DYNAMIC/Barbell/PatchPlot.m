@@ -18,13 +18,6 @@ verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+U(2:2:end,1)];
 [~, ~, ~, ~, faces] = MeshGenerator(NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle);
 % Calculate Stress at points defined in opt
-if opt == 'abscissa'
-    eta = GaussianQuadrature1D(2);
-    xi = GaussianQuadrature1D(2);
-elseif opt == 'node'
-    eta = [-1 1];
-    xi = [-1 1];
-end
 
 StressFieldNodeGrid = zeros([size(NodePosition(1:2:end,:)) length(t)]);
 for T = 1:length(t)

@@ -54,14 +54,7 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 tic;
 [t_dir, U_dyn_dir] = DynamicFEM(K,M,D,NodeGrid);
 toc;
-%%
-tic;
-[t_cms240, U_dyn_cms240] = DynamicCMSFEM(K,M,D,NodeGrid,240,[]);
-toc;
-%%
-tic;
-[t_cms40, U_dyn_cms40] = DynamicCMSFEM(K,M,D,NodeGrid,40,[]);
-toc;
+
 %%
 tic;
 [t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
@@ -75,62 +68,13 @@ toc;
 tic;
 [t_cms4, U_dyn_cms4] = DynamicCMSFEM(K,M,D,NodeGrid,4,[]);
 toc;
-%%
-AdditionalModes= [null(K) ];
-[~,boundNodes] = PositionBoundaryCondition(NodeGrid,1);
 
-AdditionalModes(boundNodes,:) = [];
-tic;
-[t_cms4Ker, U_dyn_cms4Ker] = DynamicCMSFEM(K,M,D,NodeGrid,4,AdditionalModes);
-toc;
-%%
-tic;
-[t_cms1, U_dyn_cms1] = DynamicCMSFEM(K,M,D,NodeGrid,1,[]);
-toc;
-%% Stress Calculation
-tic;
-[nodeStress_cms1, abscissaStress_cms1] = StressCalculation(U_dyn_cms1,t_cms1,nu,E,NodePositionTable,NodeTable);
-toc;
-%%
-tic;
-[nodeStress_cms240, abscissaStress_cms240] = StressCalculation(U_dyn_cms240,t_cms240,nu,E,NodePositionTable,NodeTable);
-toc;
-%%
-tic;
-[nodeStress_cms10, abscissaStress_cms10] = StressCalculation(U_dyn_cms10,t_cms10,nu,E,NodePositionTable,NodeTable);
-toc;
-%%
-tic;
-[nodeStress_cms4, abscissaStress_cms4] = StressCalculation(U_dyn_cms10,t_cms10,nu,E,NodePositionTable,NodeTable);
-toc;
-%%
-tic;
-[nodeStress_cms4Ker, abscissaStress_cms4Ker] = StressCalculation(U_dyn_cms10,t_cms10,nu,E,NodePositionTable,NodeTable);
-toc;
-%%
-tic;
-[nodeStress_dir, abscissaStress_dir] = StressCalculation(U_dyn_dir,t_dir,nu,E,NodePositionTable,NodeTable);
-toc;
+
 %% Visualisation
 
 PatchPlot('Nodal Approach',U_dyn_dir,t_dir,abscissaStress_dir,NodePosition,NodePositionTable,NumberOfElementsX,NumberOfElementsY, ...
-                                                             length_end, length_middle, thickness_end, thickness_middle,'abscissa')
-%%
-PatchPlot('1 Eigenmode',U_dyn_cms1,t_cms1,nodeStress_cms1,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
-%%
-PatchPlot('4 Eigenmodes',U_dyn_cms4,t_cms4,nodeStress_cms4,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
-%%
-PatchPlot('4 Eigenmodes + Ker',U_dyn_cms4Ker,t_cms4Ker,nodeStress_cms4Ker,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
+                                                             length_end, length_middle, thickness_end, thickness_middle)
 
-%%
-PatchPlot('10 Eigenmodes',U_dyn_cms10,t_cms10,nodeStress_cms10,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
-%%
-PatchPlot('240 Eigenmodes',U_dyn_cms240,t_cms240,nodeStress_cms240,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
-                                            length_end, length_middle, thickness_end, thickness_middle)
 %%
 
 ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms1,t_cms1,'CMS 1')
