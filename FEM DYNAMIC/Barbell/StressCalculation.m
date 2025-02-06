@@ -1,4 +1,4 @@
-function [vonMisesStressNode,vonMisesStressAbscissa] = StressCalculation(U,t,nu,E,NodePositionTable,NodeTable)
+function [vonMisesStressNode,vonMisesStressAbscissa, sigmaXnode,sigmaYnode,tauXYnode] = StressCalculation(U,t,nu,E,NodePositionTable,NodeTable)
 
 % Initialize arrays containing stress at abscissa
 sigmaX = zeros(length(NodeTable(:,1)), 4, length(t));

@@ -60,39 +60,13 @@ tic;
 [t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
 toc;
 
-%%
-tic;
-[t_cms10, U_dyn_cms10] = DynamicCMSFEM(K,M,D,NodeGrid,10,[]);
-toc;
-%%
-tic;
-[t_cms4, U_dyn_cms4] = DynamicCMSFEM(K,M,D,NodeGrid,4,[]);
-toc;
-
-
-%% Visualisation
-
-PatchPlot('Nodal Approach',U_dyn_dir,t_dir,abscissaStress_dir,NodePosition,NodePositionTable,NumberOfElementsX,NumberOfElementsY, ...
+%% Visualisation 
+%% Nodal Approach
+ElementStressDir = StressCalculation(U_dyn_dir,t_dir,nu,E,NodePositionTable,NodeTable);
+PatchPlot('Nodal Approach',U_dyn_dir,t_dir,ElementStressDir,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
-%%
-
-ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms1,t_cms1,'CMS 1')
-ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms4,t_cms4,'CMS 4')
-ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms10,t_cms10,'CMS 10')
-ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms20,t_cms20,'CMS 20')
-ErrorPlot(U_dyn_dir,t_dir,U_dyn_cms40,t_cms40,'CMS 40')
-
-%%
-Mre = zeros(1,6);
-[~, MASE(1), ~,MRE(1)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms1,U_dyn_cms1);
-[~, MASE(2), ~,MRE(2)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms4,U_dyn_cms4);
-[~, MASE(3), ~,MRE(3)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms10,U_dyn_cms10);
-[~, MASE(4), ~,MRE(4)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
-[~, MASE(5), ~,MRE(5)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms40,U_dyn_cms40);
-[~, MASE(6), ~,MRE(6)] = ErrorCalculation(t_dir,U_dyn_dir,t_cms240,U_dyn_cms240);
-figure
-loglog([1 4 10 20 40 240],MASE)
-
-figure
-plot([1 4 10 20 40 240],MRE)
+%% 
+ElementStressCMS20 = StressCalculation(U_dyn_cms20,t_cms20,nu,E,NodePositionTable,NodeTable);
+PatchPlot('CMS 20',U_dyn_cms20,t_cms20,ElementStressCMS20,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
