@@ -1,5 +1,5 @@
 %% Visualisation
-function PatchPlot(Title,U,t,ElementStress,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+function PatchPlot(Title,U,t,Phi_sigma,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
 
@@ -21,7 +21,7 @@ verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+U(2:2:end,1)];
 
 MeanNodeStress = zeros(NodeGrid(end,end)/2,length(t));
 for T = 1:length(t)
-    MeanNodeStress(:,T) = StressField(ElementStress(:,:,T),NodeTable,NodeGrid);
+    MeanNodeStress(:,T) = Phi_sigma*U(:,T);
 end
 verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+ U(2:2:end,1)];
 vertStress = MeanNodeStress(:,:,1);

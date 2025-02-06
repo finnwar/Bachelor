@@ -44,6 +44,7 @@ D = alpha*K+beta*M;
 % M = sparse(M);
 % D = sparse(D);
 
+Phi_sigma = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
 
 U_static = StaticFEM(K,ForceBoundaryCondition(NodeGrid,0),NodeGrid);
@@ -63,7 +64,7 @@ toc;
 %% Visualisation 
 %% Nodal Approach
 ElementStressDir = StressCalculation(U_dyn_dir,t_dir,nu,E,NodePositionTable,NodeTable);
-PatchPlot('Nodal Approach',U_dyn_dir,t_dir,ElementStressDir,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_sigma,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
 %% 
