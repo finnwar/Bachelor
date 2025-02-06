@@ -1,5 +1,5 @@
 %% Visualisation
-function PatchPlot(Title,U,t,nodeStress,NodePosition,NodeTable,NumberOfElementsX,NumberOfElementsY, ...
+function PatchPlot(Title,U,t,ElementStress,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
 
@@ -17,41 +17,36 @@ verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+U(2:2:end,1)];
 % define faces
 [~, ~, ~, ~, faces] = MeshGenerator(NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle);
-% Calculate Stress at vertices
+% Calculate Stress at points defined in opt
 
-vertStress = zeros(length(verts(:,1)),1);
-for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,1).';
+MeanNodeStress = zeros(NodeGrid(end,end)/2,length(t));
+for T = 1:length(t)
+    MeanNodeStress(:,T) = StressField(ElementStress(:,:,T),NodeTable,NodeGrid);
 end
 verts = [tmp(1:2:end).'+U(1:2:end,1), tmp(2:2:end).'+ U(2:2:end,1)];
-
+vertStress = MeanNodeStress(:,:,1);
 
 
 % create patch object
 figure
-pObj = patch('vertices', verts, 'faces', faces, 'FaceVertexCData',vertStress,'FaceColor','interp')
+pObj = patch('vertices', verts, 'faces', faces, 'FaceVertexCData',vertStress(:,1),'FaceColor','interp')
 title(Title)
 xlabel('x')
 ylabel('y')
+c.Label.String = 'Stress [N/mm^2]';
 colorbar
 axis('manual');
+clim([0 max(max(vertStress))])
+
 axis([-0.25*length_end 1.2*(2*length_end+length_middle) -thickness_end thickness_end])
-for ii=1:length(t)
-    %  determine displacement    
-    
-    verts = [tmp(1:2:end).'+1000*U(1:2:end,ii), tmp(2:2:end).'+ 1000*U(2:2:end,ii)];
-    
-    for e = 1:(NumberOfElementsY*NumberOfElementsX)
-        vertStress(NodeTable(e,2:2:8)/2) = nodeStress(e,:,ii).';
+    for ii=2:length(t)
+        pause(t(ii)-t(ii-1))
+        %  determine displacement    
+        verts = [tmp(1:2:end).'+1000*U(1:2:end,ii), tmp(2:2:end).'+ 1000*U(2:2:end,ii)];
+        
+        % update vertice position
+        set(pObj, 'vertices', verts, 'FaceVertexCData',MeanNodeStress(:,ii));
+        % update patch object
+        drawnow limitrate;
     end
-
-    % update vertice position
-    set(pObj, 'vertices', verts, 'FaceVertexCData',vertStress);
-
-    % update patch object
-    drawnow limitrate;
-    if ii < length(t)
-        pause(t(ii+1)-t(ii))
-    end
-end
 end
