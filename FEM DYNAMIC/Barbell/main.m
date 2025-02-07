@@ -71,6 +71,14 @@ toc;
 tic;
 [t_mod5, U_dyn_mod5] = DynamicModalFEM(K,M,D,NodeGrid,5,[]);
 toc;
+%%
+tic;
+[t_cms240, U_dyn_cms240] = DynamicCMSFEM(K,M,D,NodeGrid,240,[]);
+toc;
+%%
+tic;
+[t_mod240, U_dyn_mod240] = DynamicModalFEM(K,M,D,NodeGrid,240,[]);
+toc;
 
 %% Visualisation 
 %% Nodal Approach
@@ -86,8 +94,15 @@ PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosit
 PatchPlot('Modal 20',U_dyn_mod20,t_mod20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
-
 %% 
+
+PatchPlot('Modal 240',U_dyn_mod240,t_mod240,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
+
+PatchPlot('CMS 240',U_dyn_cms240,t_cms240,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%%
 [~,MASE(1),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
 [~,MASE(2),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
 [~,MASE(3),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
