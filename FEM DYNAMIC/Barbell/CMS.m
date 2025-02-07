@@ -1,5 +1,5 @@
 
-function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,V_cms,Phi] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
+function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie,V_cms,Phi] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
     nno = NodeGrid(end,end);
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
 
@@ -34,4 +34,6 @@ function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,V_cms,Phi
 
     invMiiDii = M_tilde_ii\D_tilde_ii;
     invMiiKii = M_tilde_ii\K_tilde_ii;
+    
+    invKiiKie = K_ii\K_ie;
 end
