@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 4;
-NumberOfElementsY = 2;
+NumberOfElementsX = 40;
+NumberOfElementsY = 10;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -44,6 +44,7 @@ D = alpha*K+beta*M;
 % M = sparse(M);
 % D = sparse(D);
 
+[Phi_vM,PhiX,PhiY,PhiXY] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
 
 U_static = StaticFEM(K,ForceBoundaryCondition(NodeGrid,0),NodeGrid);
@@ -59,14 +60,22 @@ toc;
 tic;
 [t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
 toc;
-
+%%
+tic;
+[t_cms100, U_dyn_cms100] = DynamicCMSFEM(K,M,D,NodeGrid,100,[]);
+toc;
+%%
+Ker = null(K);
+tic;
+[t_cms20K, U_dyn_cms20K] = DynamicCMSFEM(K,M,D,NodeGrid,20,Ker);
+toc;
 %% Visualisation 
 %% Nodal Approach
 ElementStressDir = StressCalculation(U_dyn_dir,t_dir,nu,E,NodePositionTable,NodeTable);
-PatchPlot('Nodal Approach',U_dyn_dir,t_dir,ElementStressDir,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
 %% 
 ElementStressCMS20 = StressCalculation(U_dyn_cms20,t_cms20,nu,E,NodePositionTable,NodeTable);
-PatchPlot('CMS 20',U_dyn_cms20,t_cms20,ElementStressCMS20,NodeGrid,NodeTable,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)

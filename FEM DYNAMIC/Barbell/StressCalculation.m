@@ -42,7 +42,7 @@ for e = 1:length(NodeTable)
     end
 end
 
-vonMisesStressAbscissa = sqrt(sigmaX.^2+sigmaY.^2+sigmaX.*sigmaY+3*(tauXY.^2));
+vonMisesStressAbscissa = sqrt(sigmaX.^2+sigmaY.^2+abs(sigmaX.*sigmaY)+3*(tauXY.^2));
 
-vonMisesStressNode = sqrt(sigmaXnode.^2+sigmaYnode.^2+sigmaXnode.*sigmaYnode+3*(tauXYnode.^2));
+vonMisesStressNode = sqrt(sigmaXnode.^2+sigmaYnode.^2+abs(sigmaXnode.*sigmaYnode)+3*(tauXYnode.^2));
 end

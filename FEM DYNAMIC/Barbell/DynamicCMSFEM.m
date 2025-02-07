@@ -2,7 +2,7 @@ function [t, U_dyn] = DynamicCMSFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes
 
 [U_0, boundaryNodes,U_0_dot,~] = PositionBoundaryCondition(NodeGrid,0);
 boundaryNodes = sort(boundaryNodes);
-
+AdditionalModes(boundaryNodes,:)=[];
 [M_ii,D_ii,K_ii,K_ie,B_M,B_D,B_K,Phi,Omega] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid);
 
 
