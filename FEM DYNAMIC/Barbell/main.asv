@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 20;
-NumberOfElementsY = 5;
+NumberOfElementsX = 40;
+NumberOfElementsY = 10;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -88,7 +88,7 @@ PatchPlot('Modal 20',U_dyn_mod20,t_mod20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePos
 
 
 %% 
-[~,MASE(1),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
-[~,MASE(2),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
-[~,MASE(3),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
-[~,MASE(4),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+[~,MASE(1),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod20)
+[~,MASE(2),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20)
+[~,MASE(3),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20)
+[~,MASE(4),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20)
