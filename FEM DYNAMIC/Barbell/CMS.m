@@ -14,7 +14,7 @@ function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie
     % Eigenmodes of the free system
 
     [Phi, Omega] = eigs(K_ii,M_ii,NumberOfModes,'smallestabs');
-    Phi = [Phi(:,1:NumberOfModes), AdditionalModes];
+    Phi = [Phi, AdditionalModes];
     
     V_cms = [eye(length(boundNodes)) zeros(length(boundNodes),length(Phi(1,:)));
              -K_ii\K_ie Phi];
