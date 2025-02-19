@@ -17,13 +17,5 @@ function [f_cond,node] = ForceBoundaryCondition(NodeGrid,t)
     
     node = NodeGrid(end-1, end);
 
-    if mod(node,2)==1
-        f_cond(node) = forceFunction;
-    else
-        f_cond(node-1) = forceFunction;
-        node = node-1;
-    end
-
-
-
+    f_cond(node) = forceFunction;
 end

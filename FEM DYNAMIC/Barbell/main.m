@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 4;
-NumberOfElementsY = 2;
+NumberOfElementsX = 60;
+NumberOfElementsY = 20;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -44,7 +44,7 @@ D = alpha*K+beta*M;
 [Phi_vM,PhiX,PhiY,PhiXY] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
 f = zeros(NodeGrid(end,end),1);
-f(end) = -10000;
+f(end) = -1000;
 U_static = StaticFEM(K,f,NodeGrid);
 U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % PlotDisplacement(U_static,NodeGrid,NodePosition)
@@ -53,6 +53,8 @@ U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 tic;
 [t_dir, U_dyn_dir] = DynamicFEM(K,M,D,NodeGrid);
 toc;
+%%
+Kernel = null(K);
 %%
 K = sparse(K);
 M = sparse(M);
@@ -64,6 +66,10 @@ toc;
 %%
 tic;
 [t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
+toc;
+%%
+tic;
+[t_cms20Ker, U_dyn_cms20Ker] = DynamicCMSFEM(K,M,D,NodeGrid,20,Kernel);
 toc;
 %%
 tic;
@@ -130,12 +136,13 @@ PatchPlot('Static',U_static,[1],Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,Num
 
 [~,~,uError(1),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
 [~,~,uError(2),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
-[~,~,uError(3),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
-[~,~,uError(4),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
-[~,~,uError(5),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
-[~,~,uError(6),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod100,U_dyn_mod100);
-[~,~,uError(7),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
-[~,~,uError(8),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod270,U_dyn_mod270);
+[~,~,uError(3),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20Ker,U_dyn_cms20Ker);
+[~,~,uError(4),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+[~,~,uError(5),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
+[~,~,uError(6),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
+[~,~,uError(7),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod100,U_dyn_mod100);
+[~,~,uError(8),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
+[~,~,uError(9),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod270,U_dyn_mod270);
 % %% 
 % [~,~,sError(1),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
 % [~,~,sError(2),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
