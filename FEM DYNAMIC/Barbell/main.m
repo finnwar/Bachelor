@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 20;
-NumberOfElementsY = 5;
+NumberOfElementsX = 30;
+NumberOfElementsY = 10;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -59,54 +59,33 @@ Kernel = null(K);
 K = sparse(K);
 M = sparse(M);
 D = sparse(D);
-%%
-tic;
-[t_cms0, U_dyn_cms0] = DynamicCMSFEM(K,M,D,NodeGrid,0,[]);
-toc;
-%%
-tic;
-[t_mod20, U_dyn_mod20] = DynamicModalFEM(K,M,D,NodeGrid,20,[]);
-toc;
+
+
 %%
 tic;
 [t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
 toc;
 %%
 tic;
-[t_cms20Ker, U_dyn_cms20Ker] = DynamicCMSFEM(K,M,D,NodeGrid,20,Kernel);
-toc;
-%%
-tic;
 [t_cms5, U_dyn_cms5] = DynamicCMSFEM(K,M,D,NodeGrid,5,[]);
 toc;
-%%
-tic;
-[t_mod5, U_dyn_mod5] = DynamicModalFEM(K,M,D,NodeGrid,5,[]);
-toc;
+
 %%
 tic;
 [t_cms100, U_dyn_cms100] = DynamicCMSFEM(K,M,D,NodeGrid,100,[]);
 toc;
-%%
-tic;
-[t_mod100, U_dyn_mod100] = DynamicModalFEM(K,M,D,NodeGrid,100,[]);
-toc;
+
 %%
 tic;
 [t_cms270, U_dyn_cms270] = DynamicCMSFEM(K,M,D,NodeGrid,270,[]);
 toc;
-%%
-tic;
-[t_mod270, U_dyn_mod270] = DynamicModalFEM(K,M,D,NodeGrid,270,[]);
-toc;
-
 %% Visualisation 
 %% Nodal Approach
 PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 %% 
 
-PatchPlot('CMS 0',U_dyn_cms0,t_cms0,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('CMS 5',U_dyn_cms5,t_cms5,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 %% 
 %% 
@@ -143,14 +122,10 @@ PatchPlot('Static',U_static,[1],Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,Num
 % Deformation Error
 
 [~,~,uError(1),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
-[~,~,uError(2),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
-[~,~,uError(3),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20Ker,U_dyn_cms20Ker);
-[~,~,uError(4),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
-[~,~,uError(5),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
-[~,~,uError(6),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
-[~,~,uError(7),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod100,U_dyn_mod100);
-[~,~,uError(8),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
-[~,~,uError(9),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod270,U_dyn_mod270);
+[~,~,uError(2),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+[~,~,uError(3),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
+[~,~,uError(4),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
+
 % %% 
 % [~,~,sError(1),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
 % [~,~,sError(2),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
