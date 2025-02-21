@@ -18,20 +18,21 @@ transformationMatrix = [1+0.5*sqrt(3) -0.5 1-0.5*sqrt(3) -0.5;
                         -0.5 1+0.5*sqrt(3) -0.5 1-0.5*sqrt(3);
                         1-0.5*sqrt(3) -0.5 1+0.5*sqrt(3) -0.5;
                         -0.5 1-0.5*sqrt(3) -0.5 1+0.5*sqrt(3)];
-
+nodeHelp = [1 2 4 3];
 for e = 1:length(NodeTable)
     for T = 1:length(t)        
         for i = 1:2
             for j= 1:2
+                
                 [~,dNdxi,dNdeta] = ShapeFunctions(xi(i),eta(j));
                 J = [dNdxi;dNdeta]*[NodePositionTable(e,1:2:7).' NodePositionTable(e,2:2:8).'];
                 detJ = det(J);
                 invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
                 B=B_matrix(xi(i), eta(j), invJ(1,1), invJ(2,1), invJ(1,2), invJ(2,2));
                 sigmaTemp = C*B*U(NodeTable(e,:),T);
-                sigmaX(e,i+(j-1)*2,T) = sigmaTemp(1);
-                sigmaY(e,i+(j-1)*2,T) = sigmaTemp(2);
-                tauXY(e,i+(j-1)*2,T)  = sigmaTemp(3);
+                sigmaX(e,nodeHelp(i+(j-1)*2),T) = sigmaTemp(1);
+                sigmaY(e,nodeHelp(i+(j-1)*2),T) = sigmaTemp(2);
+                tauXY(e,nodeHelp(i+(j-1)*2),T)  = sigmaTemp(3);
 
                 
             end

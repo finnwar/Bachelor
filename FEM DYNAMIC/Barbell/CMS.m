@@ -1,5 +1,5 @@
 
-function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie,V_cms,Phi] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
+function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie,V_cms] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid)
     nno = NodeGrid(end,end);
     [~,boundNodes] = PositionBoundaryCondition(NodeGrid,0);
 
@@ -12,13 +12,15 @@ function [invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie
 
 
     % Eigenmodes of the free system
-
-    [Phi, Omega] = eigs(K_ii,M_ii,NumberOfModes,'smallestabs');
-    Phi = [Phi, AdditionalModes];
-    
-    V_cms = [eye(length(boundNodes)) zeros(length(boundNodes),length(Phi(1,:)));
-             -K_ii\K_ie Phi];
-
+    if NumberOfModes == 0
+        V_cms = [eye(length(boundNodes)); -K_ii\K_ie];
+    else
+        [Phi, Omega] = eigs(K_ii,M_ii,NumberOfModes,'smallestabs');
+        Phi = [Phi, AdditionalModes];
+        
+        V_cms = [eye(length(boundNodes)) zeros(length(boundNodes),length(Phi(1,:)));
+                 -K_ii\K_ie Phi];
+    end
     % Calculate Matrices
     M_tilde = V_cms.'*M*V_cms;
     D_tilde = V_cms.'*D*V_cms;

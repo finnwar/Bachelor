@@ -39,7 +39,7 @@ ylabel('y')
 c.Label.String = 'Stress [N/mm^2]';
 colorbar
 axis('manual');
-set(gca,'ColorScale','log')
+% set(gca,'ColorScale','log')
 clim([0 max(max(vertStress))])
 
 axis([-0.25*length_end 1.2*(2*length_end+length_middle) -thickness_end thickness_end])

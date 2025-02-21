@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 60;
-NumberOfElementsY = 20;
+NumberOfElementsX = 20;
+NumberOfElementsY = 5;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -59,6 +59,10 @@ Kernel = null(K);
 K = sparse(K);
 M = sparse(M);
 D = sparse(D);
+%%
+tic;
+[t_cms0, U_dyn_cms0] = DynamicCMSFEM(K,M,D,NodeGrid,0,[]);
+toc;
 %%
 tic;
 [t_mod20, U_dyn_mod20] = DynamicModalFEM(K,M,D,NodeGrid,20,[]);
@@ -100,7 +104,11 @@ toc;
 %% Nodal Approach
 PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
+%% 
 
+PatchPlot('CMS 0',U_dyn_cms0,t_cms0,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
 %% 
 
 PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
