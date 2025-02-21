@@ -8,7 +8,9 @@ function [U_Boundary, affectedNodes, U_dot,U_ddot] = PositionBoundaryCondition(N
     % Motion function of forced movement
     
     amplitude = 0; %[m]
-    frequency = 1/16;   %[Hz]
+
+    frequency = 0;   %[Hz]
+
     phase = 0;  %[-]
 
     Position = amplitude*sin(2*pi*frequency*t-phase);
