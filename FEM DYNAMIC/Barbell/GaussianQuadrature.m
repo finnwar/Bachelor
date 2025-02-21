@@ -20,10 +20,6 @@ NumberOfNodes = (NumberOfElementsX+1)*(NumberOfElementsY+1);
 
 
 for e=1:TotalNumberOfElements
-
-    
-
-
     for j = 1:n
         for i = 1:n
             

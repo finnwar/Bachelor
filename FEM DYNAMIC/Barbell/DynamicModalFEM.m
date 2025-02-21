@@ -36,7 +36,7 @@ function [t, U_dyn] = DynamicModalFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalMod
     D = invM_ii_tilde*Phi.'*D_ie;
     E = invM_ii_tilde*Phi.'*M_ie;
     opt = odeset('MaxStep',1e-1);
-    tspan = [0 10];
+    tspan = [0, 10];
     [t,Xsol] = ode15s(@(t,X) timeStepIntegrationModal(t,A,B,C,D,E,X,NodeGrid), tspan, X0,opt);
 
     % Post-Processing

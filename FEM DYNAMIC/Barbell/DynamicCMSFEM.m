@@ -1,26 +1,27 @@
 function [t, U_dyn] = DynamicCMSFEM(K,M,D,NodeGrid,NumberOfModes,AdditionalModes)
 
-[U_0, boundaryNodes,U_0_dot,~] = PositionBoundaryCondition(NodeGrid,0);
+[U_0, boundaryNodes,U_dot_0,~] = PositionBoundaryCondition(NodeGrid,0);
 boundaryNodes = sort(boundaryNodes);
 if ~isempty(AdditionalModes)
     AdditionalModes(boundaryNodes,:)=[];
 end
-[M_ii,D_ii,K_ii,K_ie,B_M,B_D,B_K,Phi,Omega] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid);
+[invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,invMiiDii,invMiiKii,invKiiKie,V_cms] = CMS(K,M,D,NumberOfModes, AdditionalModes, NodeGrid);
 
 
-U_0(boundaryNodes) = [];
-U_0_dot(boundaryNodes) = [];
-q_0 = Phi\U_0;
-q_0_dot = Phi\U_0_dot;
+q_0=V_cms\U_0;
+q_0(1:length(boundaryNodes))=[];
+q_dot_0=V_cms\U_dot_0;
+q_dot_0(1:length(boundaryNodes))=[];
 
-X_0 = [q_0; q_0_dot];
-invM_tilde_ii = inv(Phi.'*M_ii*Phi);
-A = [zeros(length(Phi(1,:))) eye(length(Phi(1,:)));
-     -invM_tilde_ii*Phi.'*K_ii*Phi -invM_tilde_ii*Phi.'*D_ii*Phi];
 
-t_span = [0 10];
+X_0 = [q_0; q_dot_0];
+
+A = [zeros(size(invMiiKii)) eye(size(invMiiKii));
+     -invMiiKii -invMiiDii];
+
+t_span = [0, 10];
 opt = odeset('MaxStep',1e-1);
-[t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,Phi.',invM_tilde_ii,B_M,B_D,B_K,NodeGrid),t_span,X_0,opt);
+[t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,invMiiPhiT,invMiiMie,invMiiDie,invMiiKie,NodeGrid),t_span,X_0,opt);
 
 
 U_e = zeros(NodeGrid(end,end),length(t));
@@ -29,8 +30,11 @@ for i = 1:length(t)
 
 end
 U_e = U_e(boundaryNodes,:);
-K_ii_invK_ie = K_ii\K_ie;
-U_dyn = BoundaryReinsertion(NodeGrid,t,boundaryNodes,[-K_ii_invK_ie Phi]*[U_e;X(:,1:end/2).']);
+
+q_dyn = X(:,1:end/2).';
 
 
+U_i = -invKiiKie*U_e+Phi*q_dyn;
+
+U_dyn = BoundaryReinsertion(NodeGrid,t,boundaryNodes,U_i);
 end

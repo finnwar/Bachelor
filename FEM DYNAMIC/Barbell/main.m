@@ -35,25 +35,33 @@ NumberOfElementsY = 5;
 
 [K,M] = GaussianQuadrature(NodeTable, NodePositionTable, NumberOfElementsX, NumberOfElementsY,thickness, E, nu, rho);
 
-alpha = 0;
-beta = 0;
+alpha = 1e-10;
+beta = 1e-4;
 
 D = alpha*K+beta*M;
 
-% K = sparse(K);
-% M = sparse(M);
-% D = sparse(D);
 
 [Phi_vM,PhiX,PhiY,PhiXY] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
-
-U_static = StaticFEM(K,ForceBoundaryCondition(NodeGrid,0),NodeGrid);
+f = zeros(NodeGrid(end,end),1);
+f(end) = -1000;
+U_static = StaticFEM(K,f,NodeGrid);
 U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % PlotDisplacement(U_static,NodeGrid,NodePosition)
 
 %% Transient response
 tic;
 [t_dir, U_dyn_dir] = DynamicFEM(K,M,D,NodeGrid);
+toc;
+%%
+Kernel = null(K);
+%%
+K = sparse(K);
+M = sparse(M);
+D = sparse(D);
+%%
+tic;
+[t_cms0, U_dyn_cms0] = DynamicCMSFEM(K,M,D,NodeGrid,0,[]);
 toc;
 %%
 tic;
@@ -65,18 +73,42 @@ tic;
 toc;
 %%
 tic;
+[t_cms20Ker, U_dyn_cms20Ker] = DynamicCMSFEM(K,M,D,NodeGrid,20,Kernel);
+toc;
+%%
+tic;
 [t_cms5, U_dyn_cms5] = DynamicCMSFEM(K,M,D,NodeGrid,5,[]);
 toc;
 %%
 tic;
 [t_mod5, U_dyn_mod5] = DynamicModalFEM(K,M,D,NodeGrid,5,[]);
 toc;
+%%
+tic;
+[t_cms100, U_dyn_cms100] = DynamicCMSFEM(K,M,D,NodeGrid,100,[]);
+toc;
+%%
+tic;
+[t_mod100, U_dyn_mod100] = DynamicModalFEM(K,M,D,NodeGrid,100,[]);
+toc;
+%%
+tic;
+[t_cms270, U_dyn_cms270] = DynamicCMSFEM(K,M,D,NodeGrid,270,[]);
+toc;
+%%
+tic;
+[t_mod270, U_dyn_mod270] = DynamicModalFEM(K,M,D,NodeGrid,270,[]);
+toc;
 
 %% Visualisation 
 %% Nodal Approach
 PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
+%% 
 
+PatchPlot('CMS 0',U_dyn_cms0,t_cms0,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
 %% 
 
 PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
@@ -86,9 +118,53 @@ PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosit
 PatchPlot('Modal 20',U_dyn_mod20,t_mod20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle)
 
-
 %% 
-[~,MASE(1),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
-[~,MASE(2),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
-[~,MASE(3),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
-[~,MASE(4),~,~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+
+PatchPlot('Modal 100',U_dyn_mod100,t_mod100,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
+
+PatchPlot('CMS 100',U_dyn_cms100,t_cms100,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
+
+PatchPlot('Modal 270',U_dyn_mod270,t_mod270,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
+
+PatchPlot('CMS 270',U_dyn_cms270,t_cms270,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% 
+
+PatchPlot('Static',U_static,[1],Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+                                                             length_end, length_middle, thickness_end, thickness_middle)
+%% Error Calculation
+
+% Deformation Error
+
+[~,~,uError(1),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
+[~,~,uError(2),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
+[~,~,uError(3),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20Ker,U_dyn_cms20Ker);
+[~,~,uError(4),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+[~,~,uError(5),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
+[~,~,uError(6),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
+[~,~,uError(7),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod100,U_dyn_mod100);
+[~,~,uError(8),~] = ErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
+[~,~,uError(9),~] = ErrorCalculation(t_dir,U_dyn_dir,t_mod270,U_dyn_mod270);
+% %% 
+% [~,~,sError(1),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms5,U_dyn_cms5);
+% [~,~,sError(2),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod5,U_dyn_mod5);
+% [~,~,sError(3),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms20,U_dyn_cms20);
+% [~,~,sError(4),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod20,U_dyn_mod20);
+% [~,~,sError(5),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms100,U_dyn_cms100);
+% [~,~,sError(6),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod100,U_dyn_mod100);
+% [~,~,sError(7),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_cms270,U_dyn_cms270);
+% [~,~,sError(8),~] = StressErrorCalculation(t_dir,U_dyn_dir,t_mod270,U_dyn_mod270);
+
+
+
+
+
+
+
+
