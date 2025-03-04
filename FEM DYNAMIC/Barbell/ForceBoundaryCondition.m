@@ -6,7 +6,7 @@ function [f_cond,node] = ForceBoundaryCondition(NodeGrid,t)
     
     % Condition
 
-    maxForce = -100; %[N]
+    maxForce = 100; %[N]
     frequency = 1/8; %[Hz]
     phase = 0; %[-]
 
@@ -15,7 +15,7 @@ function [f_cond,node] = ForceBoundaryCondition(NodeGrid,t)
     % Application of force at the top end of part (single node!!!)
 
     
-    node = NodeGrid(end-1, end);
+    node = NodeGrid(end, end);
 
     f_cond(node) = forceFunction;
 end

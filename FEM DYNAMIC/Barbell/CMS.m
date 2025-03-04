@@ -21,6 +21,7 @@ function [M_tilde_ii,D_tilde_ii,K_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,V_cm
         V_cms = [eye(length(boundNodes)) zeros(length(boundNodes),length(Phi(1,:)));
                  -K_ii\K_ie Phi];
     end
+    
     % Calculate Matrices
     M_tilde = V_cms.'*M*V_cms;
     D_tilde = V_cms.'*D*V_cms;
