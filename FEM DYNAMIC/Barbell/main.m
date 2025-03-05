@@ -41,7 +41,7 @@ beta = 1e-4;
 D = alpha*K+beta*M;
 
 
-[Phi_vM,PhiX,PhiY,PhiXY] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
+[Phi_vM,PhiX,PhiY,PhiXY,PhiXnode,PhiYnode,PhiXYnode,PhiXcenter,PhiYcenter,PhiXYcenter] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
 f = zeros(NodeGrid(end,end),1);
 f(end) = -1000;
