@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 20;
-NumberOfElementsY = 5;
+NumberOfElementsX = 30;
+NumberOfElementsY = 12;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
