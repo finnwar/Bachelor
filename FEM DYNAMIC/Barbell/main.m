@@ -26,7 +26,7 @@ g = 9.81;       %Gravitational constant [m/s^2]
 % Mesh-Resolution
 
 NumberOfElementsX = 30;
-NumberOfElementsY = 10;
+NumberOfElementsY = 12;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -41,7 +41,7 @@ beta = 1e-3;
 D = alpha*K+beta*M;
 
 
-[Phi_vM,PhiX,PhiY,PhiXY] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
+[Phi_vM,PhiX,PhiY,PhiXY,PhiXnode,PhiYnode,PhiXYnode,PhiXcenter,PhiYcenter,PhiXYcenter] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 %% Solve static FEM with boundary conditions
 f = zeros(NodeGrid(end,end),1);
 f(end) = -1000;
