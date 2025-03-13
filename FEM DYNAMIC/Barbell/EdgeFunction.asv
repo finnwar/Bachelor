@@ -1,12 +1,11 @@
 %%Function describing the upper and lower edge of the part
 
 function y = EdgeFunction(factors, x, length_end, length_middle, thickness_middle)
+
+if x>
+
+
 total_length = 2*length_end + length_middle;
-if x>total_length
-    x=total_length;
-end
-
-
     if x<0
         error("Out of Bounds")
 

@@ -65,5 +65,4 @@ for i = 1:length(maxU)-1
     relDeltaMaxU(i)=maxU(i+1)/maxU(i);
     
     deltaAvgU(i)=abs(avgU(i+1)-avgU(i));
-    relDeltaAvgU(i)=avgU(i+1)/avgU(i);
-end
+    relDeltaAvgU(i)=
