@@ -6,6 +6,8 @@ if length(t_ref) > length(t_comp)
     end
     t = t_ref;
     U_comp = U_interp;
+elseif length(t_ref)==length(t_comp)
+    t = t_ref;
 else
     for i = 1:length(U_ref(:,1))
         U_interp(i,:) = interp1(t_ref,U_ref(i,:),t_comp,'spline');

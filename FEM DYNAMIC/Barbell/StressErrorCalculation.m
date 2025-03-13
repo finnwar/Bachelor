@@ -7,6 +7,8 @@ Sigma_interp = zeros(length(Sigma_ref(:,1)),length(t_ref));
     end
     t = t_ref;
     Sigma_comp = Sigma_interp;
+elseif length(t_ref) == length(t_comp)
+    t=t_ref;
 else
 Sigma_interp = zeros(length(Sigma_ref(:,1)),length(t_comp));
     for i = 1:length(Sigma_ref(:,1))
