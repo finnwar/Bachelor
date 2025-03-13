@@ -21,8 +21,12 @@ A = [zeros(size(M_tilde_ii\K_tilde_ii)) eye(size(M_tilde_ii\K_tilde_ii));
 
 t_span = [0, 10];
 opt = odeset('MaxStep',1e-1);
-[t, X] = ode23s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0,opt);
-
+% try
+%     [t, X] = ode23s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0,opt);
+% catch
+    t_span = linspace(0, 10,5000);
+    [t, X] = ode23s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0,opt);
+% end
 
 U_e = zeros(NodeGrid(end,end),length(t));
 for i = 1:length(t)

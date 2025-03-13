@@ -28,7 +28,7 @@ M_ii_invM_ie = M_ii_inv*M_ie;
 
     %% ODE Solver
     opt = odeset('MaxStep',1e-1);
-    tspan = linspace(0,10,1000);
+    tspan = linspace(0,10,5000);
     [t,Xsol] = ode15s(@(t,X) timeStepIntegration(t,A,X,M_ii_inv,M_ii_invK_ie,M_ii_invD_ie,M_ii_invM_ie,NodeGrid), tspan, X0,opt);
 
     % Post-Processing

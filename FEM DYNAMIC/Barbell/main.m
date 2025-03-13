@@ -25,8 +25,8 @@ g = 9.81;       %Gravitational constant [m/s^2]
 
 % Mesh-Resolution
 
-NumberOfElementsX = 30;
-NumberOfElementsY = 12;
+NumberOfElementsX = 20;
+NumberOfElementsY = 10;
 
 %% Mesh generation
 [NodeGrid, NodeTable, NodePosition, NodePositionTable] = MeshGenerator(NumberOfElementsX, NumberOfElementsY, length_end, length_middle, thickness_end, thickness_middle);
@@ -60,180 +60,56 @@ K = sparse(K);
 M = sparse(M);
 D = sparse(D);
 
-%%
-try
-tic;
-[t_cms1, U_dyn_cms1] = DynamicCMSFEM(K,M,D,NodeGrid,1,[]);
-toc;
-catch
-    disp("CMS 1 failed.")
-end
-
-%%
-try
-tic;
-[t_cms5, U_dyn_cms5] = DynamicCMSFEM(K,M,D,NodeGrid,5,[]);
-toc;
-catch
-    disp("CMS 5 failed.")
-end
-%%
-try
-tic;
-[t_cms20, U_dyn_cms20] = DynamicCMSFEM(K,M,D,NodeGrid,20,[]);
-toc;
-catch
-    disp("CMS 20 failed.")
-end
-
-%%
-try
-
-tic;
-[t_cms30, U_dyn_cms30] = DynamicCMSFEM(K,M,D,NodeGrid,30,[]);
-toc;
-catch
-    disp("CMS 30 failed.")
-end
-%%
-try
-tic;
-[t_cms50, U_dyn_cms50] = DynamicCMSFEM(K,M,D,NodeGrid,50,[]);
-toc;
-catch
-    disp("CMS 50 failed.")
-end
-%%
-try
-tic;
-[t_cms80, U_dyn_cms80] = DynamicCMSFEM(K,M,D,NodeGrid,80,[]);
-toc;
-catch
-    disp("CMS 80 failed.")
-end
-%%
-try
-tic;
-[t_cms100, U_dyn_cms100] = DynamicCMSFEM(K,M,D,NodeGrid,100,[]);
-toc;
-catch
-    disp("CMS 100 failed.")
-end
-
-%%
-try
-tic;
-[t_cms120, U_dyn_cms120] = DynamicCMSFEM(K,M,D,NodeGrid,120,[]);
-toc;
-catch
-    disp("CMS 120 failed.")
-end
-%%
-try
-tic;
-[t_cms150, U_dyn_cms150] = DynamicCMSFEM(K,M,D,NodeGrid,150,[]);
-toc;
-catch
-    disp("CMS 150 failed.")
-end
-%%
-try
-tic;
-[t_cm200, U_dyn_cms200] = DynamicCMSFEM(K,M,D,NodeGrid,200,[]);
-toc;
-catch
-    disp("CMS 200 failed.")
-end
-%%
-try
-tic;
-[t_cms250, U_dyn_cms250] = DynamicCMSFEM(K,M,D,NodeGrid,250,[]);
-toc;
-catch
-    disp("CMS 250 failed.")
-end
-%%
-try
-tic;
-[t_cms270, U_dyn_cms270] = DynamicCMSFEM(K,M,D,NodeGrid,270,[]);
-toc;
-catch
-    disp("CMS 270 failed.")
-end
-%%
-try
-tic;
-[t_cms300, U_dyn_cms300] = DynamicCMSFEM(K,M,D,NodeGrid,300,[]);
-toc;
-catch
-    disp("CMS 300 failed.")
-end
-%%
-try
-tic;
-[t_cms400, U_dyn_cms400] = DynamicCMSFEM(K,M,D,NodeGrid,400,[]);
-toc;
-catch
-    disp("CMS 400 failed.")
-end
-%%
-try
-tic;
-[t_cms500, U_dyn_cms500] = DynamicCMSFEM(K,M,D,NodeGrid,500,[]);
-toc;
-catch
-    disp("CMS 500 failed.")
-end
-%%
-try
-tic;
-[t_cmsFull, U_dyn_cmsFull] = DynamicCMSFEM(K,M,D,NodeGrid,1000,[]);
-toc;
-catch
-    disp("CMS Full failed.")
-end
-
-% %% Visualisation 
-% %% Nodal Approach
-% PatchPlot('Nodal Approach',U_dyn_dir,t_dir,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('CMS 1',U_dyn_cms1,t_cms1,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-%% 
-% %% 
-% 
-% PatchPlot('CMS 20',U_dyn_cms20,t_cms20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('Modal 20',U_dyn_mod20,t_mod20,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% 
-% %% 
-% 
-% PatchPlot('Modal 100',U_dyn_mod100,t_mod100,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('CMS 100',U_dyn_cms100,t_cms100,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('Modal 270',U_dyn_mod270,t_mod270,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('CMS 270',U_dyn_cms270,t_cms270,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
-% %% 
-% 
-% PatchPlot('Static',U_static,[1],Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
-%                                                              length_end, length_middle, thickness_end, thickness_middle)
 
 
+    sigXref = PhiX*U_dyn_dir;
+    sigYref = PhiY*U_dyn_dir;
+    tauXYref = PhiXY*U_dyn_dir;
 
+    sigXnoderef = PhiXnode*U_dyn_dir;
+    sigYnoderef = PhiYnode*U_dyn_dir;
+    tauXYnoderef = PhiXYnode*U_dyn_dir;
+    
+    sigXcenterref = PhiXcenter*U_dyn_dir;
+    sigYcenterref = PhiYcenter*U_dyn_dir;
+    tauXYcenterref = PhiXYcenter*U_dyn_dir;
+%%
+numberOfModes = zeros(4,1);
+total_error=numberOfModes;
+mean_rel_error=numberOfModes;
+for i = 1:20:441
+    numberOfModes((i-1)/20+1)=i;
+    j=(i-1)/20+1;
+    [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,i,[]);
+    [~,~,total_error((i-1)/20+1),mean_rel_error((i-1)/20+1)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
+    
+
+    sigX = PhiX*U_dyn_cms;
+    sigY = PhiY*U_dyn_cms;
+    tauXY = PhiXY*U_dyn_cms;
+
+    sigXnode = PhiXnode*U_dyn_cms;
+    sigYnode = PhiYnode*U_dyn_cms;
+    tauXYnode = PhiXYnode*U_dyn_cms;
+    
+    sigXcenter = PhiXcenter*U_dyn_cms;
+    sigYcenter = PhiYcenter*U_dyn_cms;
+    tauXYcenter = PhiXYcenter*U_dyn_cms;
+    
+    [~, ~, absStressErrorX(j), relStressErrorX(j),~]=StressErrorCalculation(t_dir,sigXref,t,sigX);
+    [~, ~, absStressErrorY(j), relStressErrorY(j),~]=StressErrorCalculation(t_dir,sigYref,t,sigY);
+    [~, ~, absStressErrorXY(j), relStressErrorXY(j),~]=StressErrorCalculation(t_dir,tauXYref,t,tauXY);
+
+    [~, ~, absStressErrorXnode(j), relStressErrorXnode(j),~]=StressErrorCalculation(t_dir,sigXnoderef,t,sigXnode);
+    [~, ~, absStressErrorYnode(j), relStressErrorYnode(j),~]=StressErrorCalculation(t_dir,sigYnoderef,t,sigYnode);
+    [~, ~, absStressErrorXYnode(j), relStressErrorXYnode(j),~]=StressErrorCalculation(t_dir,tauXYnoderef,t,tauXYnode);
+
+    [~, ~, absStressErrorXcenter(j), relStressErrorXcenter(j),~]=StressErrorCalculation(t_dir,sigXcenterref,t,sigXcenter);
+    [~, ~, absStressErrorYcenter(j), relStressErrorYcenter(j),~]=StressErrorCalculation(t_dir,sigYcenterref,t,sigYcenter);
+    [~, ~, absStressErrorXYcenter(j), relStressErrorXYcenter(j),~]=StressErrorCalculation(t_dir,tauXYcenterref,t,tauXYcenter);
+
+
+end
 
 
 
