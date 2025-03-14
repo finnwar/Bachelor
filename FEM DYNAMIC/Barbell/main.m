@@ -42,9 +42,10 @@ D = alpha*K+beta*M;
 
 
 [Phi_vM,PhiX,PhiY,PhiXY,PhiXnode,PhiYnode,PhiXYnode,PhiXcenter,PhiYcenter,PhiXYcenter] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
+
 %% Solve static FEM with boundary conditions
 f = zeros(NodeGrid(end,end),1);
-f(end) = -1000;
+f(end) = 1000;
 U_static = StaticFEM(K,f,NodeGrid);
 U_mass = StaticFEM(K,g*M*ones(size(U_static)),NodeGrid);
 % PlotDisplacement(U_static,NodeGrid,NodePosition)
@@ -73,16 +74,20 @@ D = sparse(D);
     sigXcenterref = PhiXcenter*U_dyn_dir;
     sigYcenterref = PhiYcenter*U_dyn_dir;
     tauXYcenterref = PhiXYcenter*U_dyn_dir;
-%%
+%% Convergence Study of Stresses
 numberOfModes = zeros(4,1);
 total_error=numberOfModes;
 mean_rel_error=numberOfModes;
-for i = 1:20:441
-    numberOfModes((i-1)/20+1)=i;
-    j=(i-1)/20+1;
+
+
+maximum_modes=441;
+interval=20;
+for i = 1:interval:maximum_modes
+    numberOfModes((i-1)/interval+1)=i;
+    j=(i-1)/interval+1;
     [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,i,[]);
-    [~,~,total_error((i-1)/20+1),mean_rel_error((i-1)/20+1)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
-    
+    [~,~,total_error((i-1)/interval+1),mean_rel_error((i-1)/interval+1)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
+
 
     sigX = PhiX*U_dyn_cms;
     sigY = PhiY*U_dyn_cms;
@@ -91,11 +96,11 @@ for i = 1:20:441
     sigXnode = PhiXnode*U_dyn_cms;
     sigYnode = PhiYnode*U_dyn_cms;
     tauXYnode = PhiXYnode*U_dyn_cms;
-    
+
     sigXcenter = PhiXcenter*U_dyn_cms;
     sigYcenter = PhiYcenter*U_dyn_cms;
     tauXYcenter = PhiXYcenter*U_dyn_cms;
-    
+
     [~, ~, absStressErrorX(j), relStressErrorX(j),~]=StressErrorCalculation(t_dir,sigXref,t,sigX);
     [~, ~, absStressErrorY(j), relStressErrorY(j),~]=StressErrorCalculation(t_dir,sigYref,t,sigY);
     [~, ~, absStressErrorXY(j), relStressErrorXY(j),~]=StressErrorCalculation(t_dir,tauXYref,t,tauXY);
@@ -112,6 +117,38 @@ for i = 1:20:441
 end
 
 
+%% Plotting
+figure('Name','Convergence of Relative Error of Stress at Element Center')
+
+plot(numberOfModes,relStressErrorXcenter,'Color','blue')
+hold on;
+plot(numberOfModes,relStressErrorYcenter,'Color','red')
+plot(numberOfModes,relStressErrorXYcenter,'Color','black')
+xlabel('Number of Modes')
+ylabel('Relative Error')
+title('Convergence of Stress Evaluated at Element Center')
+legend('Normal Stress X','Normal Stress Y','Shear Stress')
 
 
+figure('Name','Convergence of Relative Error of Stress at Gauss Points')
 
+plot(numberOfModes,relStressErrorX,'Color','blue')
+hold on;
+plot(numberOfModes,relStressErrorY,'Color','red')
+plot(numberOfModes,relStressErrorXY,'Color','black')
+xlabel('Number of Modes')
+ylabel('Relative Error')
+title('Convergence of Stress Evaluated at Gauss Points')
+legend('Normal Stress X','Normal Stress Y','Shear Stress')
+
+
+figure('Name','Convergence of Relative Error of Stress at Nodes')
+
+plot(numberOfModes,relStressErrorXnode,'Color','blue')
+hold on;
+plot(numberOfModes,relStressErrorYnode,'Color','red')
+plot(numberOfModes,relStressErrorXYnode,'Color','black')
+xlabel('Number of Modes')
+ylabel('Relative Error')
+title('Convergence of Stress Evaluated at Nodes')
+legend('Normal Stress X','Normal Stress Y','Shear Stress')

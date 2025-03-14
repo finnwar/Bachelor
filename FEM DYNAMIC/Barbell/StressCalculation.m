@@ -14,9 +14,9 @@ sigmaXnodeDir = zeros(length(NodeTable(:,1)), 4, length(t));
 sigmaYnodeDir = zeros(length(NodeTable(:,1)), 4, length(t));
 tauXYnodeDir = zeros(length(NodeTable(:,1)), 4, length(t));
 % Initialize arrays containing stress at center
-sigmaXCenter = zeros(length(NodeTable(:,1)), 1, length(t));
-sigmaYCenter = zeros(length(NodeTable(:,1)), 1, length(t));
-tauXYCenter = zeros(length(NodeTable(:,1)), 1, length(t));
+sigmaXCenter = zeros(length(NodeTable(:,1)), length(t));
+sigmaYCenter = zeros(length(NodeTable(:,1)), length(t));
+tauXYCenter = zeros(length(NodeTable(:,1)), length(t));
 % Gauss abscissae
 xi=GaussianQuadrature1D(2);
 eta = xi;
@@ -35,7 +35,8 @@ for e = 1:length(NodeTable)
     for T = 1:length(t)        
         for i = 1:2
             for j= 1:2
-                
+                % Stress calculated at the Gauß-point and extrapolated to
+                % node
                 [~,dNdxi,dNdeta] = ShapeFunctions(xi(i),eta(j));
                 J = [dNdxi;dNdeta]*[NodePositionTable(e,1:2:7).' NodePositionTable(e,2:2:8).'];
                 detJ = det(J);
@@ -63,9 +64,9 @@ for e = 1:length(NodeTable)
         invJ = 1/detJ*[J(2,2) -J(1,2); -J(2,1) J(1,1)];
         B=B_matrix(0, 0, invJ(1,1), invJ(2,1), invJ(1,2), invJ(2,2));
         sigmaTemp = C*B*U(NodeTable(e,:),T);
-        sigmaXCenter = sigmaTemp(1);
-        sigmaYCenter = sigmaTemp(2);
-        tauXYCenter  = sigmaTemp(3);
+        sigmaXCenter(e,T) = sigmaTemp(1);
+        sigmaYCenter(e,T) = sigmaTemp(2);
+        tauXYCenter(e,T)  = sigmaTemp(3);
 
         sigmaXnode(e,:,T)=(transformationMatrix*sigmaX(e,:,T).').';
         sigmaYnode(e,:,T)=(transformationMatrix*sigmaY(e,:,T).').';
