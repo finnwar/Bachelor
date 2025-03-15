@@ -85,34 +85,34 @@ mean_rel_error=numberOfModes;
 
 
 maximum_modes=441;
-interval=40;
+interval=20;
 
-absStressErrorX = zeros(length(1:interval:maximum_modes),1);
-relStressErrorX = absStressErrorX;
-absStressErrorY = absStressErrorX;
-relStressErrorY = absStressErrorX;
-absStressErrorXY = absStressErrorX;
-relStressErrorXY = absStressErrorX;
-absStressErrorvM = absStressErrorX;
-relStressErrorvM = absStressErrorX;
+absStressErrorX = zeros()
+relStressErrorX
+absStressErrorY
+relStressErrorY
+absStressErrorXY
+relStressErrorXY
+absStressErrorvM
+relStressErrorvM
 
-absStressErrorXnode = absStressErrorX;
-relStressErrorXnode = absStressErrorX;
-absStressErrorYnode = absStressErrorX;
-relStressErrorYnode = absStressErrorX;
-absStressErrorXYnode = absStressErrorX;
-relStressErrorXYnode = absStressErrorX;
-absStressErrorvMnode = absStressErrorX;
-relStressErrorvMnode = absStressErrorX;
+absStressErrorXnode
+relStressErrorXnode
+absStressErrorYnode
+relStressErrorYnode
+absStressErrorXYnode
+relStressErrorXYnode
+absStressErrorvMnode
+relStressErrorvMnode
 
-absStressErrorXcenter = absStressErrorX;
-relStressErrorXcenter = absStressErrorX;
-absStressErrorYcenter = absStressErrorX;
-relStressErrorYcenter = absStressErrorX;
-absStressErrorXYcenter = absStressErrorX;
-relStressErrorXYcenter = absStressErrorX;
-absStressErrorvMcenter = absStressErrorX;
-relStressErrorvMcenter = absStressErrorX;
+absStressErrorXcenter
+relStressErrorXcenter
+absStressErrorYcenter
+relStressErrorYcenter
+absStressErrorXYcenter
+relStressErrorXYcenter
+absStressErrorvMcenter
+relStressErrorvMcenter
 
 for i = 1:interval:maximum_modes
     numberOfModes((i-1)/interval+1)=i;
@@ -199,5 +199,5 @@ legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
 
 
 function [vM] = vonMisesStress(sigX, sigY, tauXY)
-    vM = sqrt(sigX.^2+sigY.^2-sigX.*sigY+3*(tauXY).^2);
+    vM = sqrt(sigX.^2+sigY.^2+abs(sigX.*sigY)+3*(tauXY).^2);
 end
