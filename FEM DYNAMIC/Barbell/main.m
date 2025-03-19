@@ -84,8 +84,8 @@ total_error=numberOfModes;
 mean_rel_error=numberOfModes;
 
 
-maximum_modes=441;
-interval = 10;
+maximum_modes=10;
+interval = 1;
 
 absStressErrorX = zeros(length(1:interval:maximum_modes),1);
 relStressErrorX = absStressErrorX;
