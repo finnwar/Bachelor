@@ -1,0 +1,54 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.951\fwidth,
+height=0.75\fwidth,
+at={(0\fwidth,0\fwidth)},
+scale only axis,
+xmin=0,
+xmax=450,
+xlabel style={font=\color{white!15!black}},
+xlabel={Number Of Modes},
+ymode=log,
+ymin=0.000523890034220881,
+ymax=0.0316859175341479,
+yminorticks=true,
+ylabel style={font=\color{white!15!black}},
+ylabel={Relative Error},
+axis background/.style={fill=white},
+xmajorgrids,
+ymajorgrids,
+yminorgrids
+]
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1	0.0316859175341479\\
+21	0.00264777858631708\\
+41	0.0018251235220179\\
+61	0.00144419434461643\\
+81	0.00121530460306993\\
+121	0.000921060484335342\\
+141	0.000871288595202575\\
+161	0.000806970436884274\\
+181	0.000697937749339872\\
+201	0.000647221967299911\\
+221	0.0007393334483896\\
+241	0.000712573670248996\\
+261	0.00063246051011683\\
+281	0.000606813115104024\\
+301	0.000541328835296379\\
+321	0.000535719872851845\\
+341	0.000525715084532999\\
+361	0.000524079595040213\\
+441	0.000523890034220881\\
+};
+\end{axis}
+\end{tikzpicture}%

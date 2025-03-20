@@ -84,8 +84,8 @@ total_error=numberOfModes;
 mean_rel_error=numberOfModes;
 
 
-maximum_modes=10;
-interval = 1;
+maximum_modes=441;
+interval = 20;
 
 absStressErrorX = zeros(length(1:interval:maximum_modes),1);
 relStressErrorX = absStressErrorX;
@@ -158,46 +158,57 @@ end
 %% Plotting
 figure('Name','Convergence of Relative Error of Stress at Element Center')
 
-
-plot(numberOfModes,relStressErrorXcenter,'Color','blue')
+semilogy(numberOfModes,relStressErrorXcenter,'Color','blue')
 hold on;
-plot(numberOfModes,relStressErrorYcenter,'Color','red')
-plot(numberOfModes,relStressErrorXYcenter,'Color','black')
-plot(numberOfModes,relStressErrorvMcenter,'Color','green')
+semilogy(numberOfModes,relStressErrorYcenter,'Color','red')
+semilogy(numberOfModes,relStressErrorXYcenter,'Color','black')
+semilogy(numberOfModes,relStressErrorvMcenter,'Color','green')
+grid on
 xlabel('Number of Modes')
 ylabel('Relative Error')
-title('Convergence of Stress Evaluated at Element Center')
-legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
+% title('Convergence of Stress Evaluated at Element Center')
+% legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
 
-
+%%
 figure('Name','Convergence of Relative Error of Stress at Gauss Points')
 
-plot(numberOfModes,relStressErrorX,'Color','blue')
+semilogy(numberOfModes,relStressErrorX,'Color','blue')
 hold on;
-plot(numberOfModes,relStressErrorY,'Color','red')
-plot(numberOfModes,relStressErrorXY,'Color','black')
-plot(numberOfModes,relStressErrorvM,"Color",'green')
+semilogy(numberOfModes,relStressErrorY,'Color','red')
+semilogy(numberOfModes,relStressErrorXY,'Color','black')
+semilogy(numberOfModes,relStressErrorvM,"Color",'green')
+grid on
 xlabel('Number of Modes')
 ylabel('Relative Error')
-title('Convergence of Stress Evaluated at Gauss Points')
+% title('Convergence of Stress Evaluated at Gauss Points')
 legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
 
-
+%%
 figure('Name','Convergence of Relative Error of Stress at Nodes')
 
-plot(numberOfModes,relStressErrorXnode,'Color','blue')
+semilogy(numberOfModes,relStressErrorXnode,'Color','blue')
 hold on;
-plot(numberOfModes,relStressErrorYnode,'Color','red')
-plot(numberOfModes,relStressErrorXYnode,'Color','black')
-plot(numberOfModes,relStressErrorvMnode,"Color",'green')
+semilogy(numberOfModes,relStressErrorYnode,'Color','red')
+semilogy(numberOfModes,relStressErrorXYnode,'Color','black')
+semilogy(numberOfModes,relStressErrorvMnode,"Color",'green')
+grid on
 xlabel('Number of Modes')
 ylabel('Relative Error')
-title('Convergence of Stress Evaluated at Nodes')
-legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
-
-
-
-
+% title('Convergence of Stress Evaluated at Nodes')
+% legend('Normal Stress X','Normal Stress Y','Shear Stress','von Mises')
+%%
+figure('Name','Relative Displacement Error')
+semilogy(numberOfModes,mean_rel_error)
+grid on
+xlabel('Number Of Modes')
+ylabel('Relative Error')
+%%
+figure('Name','Absolute Displacement Error')
+semilogy(numberOfModes,total_error)
+grid on
+xlabel('Number of Modes')
+ylabel('Absolute Error[m]')
+%%
 function [vM] = vonMisesStress(sigX, sigY, tauXY)
     vM = sqrt(sigX.^2+sigY.^2-sigX.*sigY+3*(tauXY).^2);
 end
