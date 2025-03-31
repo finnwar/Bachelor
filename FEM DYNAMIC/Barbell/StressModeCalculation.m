@@ -1,4 +1,6 @@
-function [Phi_vonMises,Phi_X,Phi_Y,Phi_XY,Phi_Xnode,Phi_Ynode,Phi_XYnode,Phi_Xcenter,Phi_Ycenter,Phi_XYcenter] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable, nu, E)
+function [Phi_vonMises,Phi_X,Phi_Y,Phi_XY,Phi_Xnode,Phi_Ynode,Phi_XYnode,Phi_Xcenter,Phi_Ycenter,Phi_XYcenter,...
+    Internal_Gauss_X,Internal_Gauss_Y,Internal_Gauss_XY,Internal_Nodal_X,Internal_Nodal_Y,Internal_Nodal_XY] ...
+    = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable, nu, E)
     % Stress modes evaluated at abscissa and extrapolated to node
     Phi_vonMises = zeros(NodeGrid(end,end)/2,NodeGrid(end,end));
     
@@ -18,15 +20,30 @@ function [Phi_vonMises,Phi_X,Phi_Y,Phi_XY,Phi_Xnode,Phi_Ynode,Phi_XYnode,Phi_Xce
         unitLoad(i) = 1;
     
         [vonMises,~, sigmaX,sigmaY,tauXY,sigmaXnode,sigmaYnode,tauXYnode,sigmaXcenter,sigmaYcenter,tauXYcenter] = StressCalculation(unitLoad,1,nu,E,NodePositionTable,NodeTable);
+        
+        % Stress Modes without averageing at nodes
+        Internal_Gauss_X(:,i) = sigmaX(:);
+        Internal_Gauss_Y(:,i) = sigmaY(:);
+        Internal_Gauss_XY(:,i) = tauXY(:);
+
+        Internal_Nodal_X(:,i) = sigmaXnode(:);
+        Internal_Nodal_Y(:,i) = sigmaYnode(:);
+        Internal_Nodal_XY(:,i) = tauXYnode(:);
+        
+        
+        
+        % Gauss point stress extrapolated and averaged
         Phi_vonMises(:,i) = StressField(vonMises,NodeTable,NodeGrid);
         Phi_X(:,i) = StressField(sigmaX,NodeTable,NodeGrid);
         Phi_Y(:,i) = StressField(sigmaY,NodeTable,NodeGrid);
         Phi_XY(:,i) = StressField(tauXY,NodeTable,NodeGrid);
-
+        
+        % Nodal stress evaulated directly at the nodes
         Phi_Xnode(:,i) = StressField(sigmaXnode,NodeTable,NodeGrid);
         Phi_Ynode(:,i) = StressField(sigmaYnode,NodeTable,NodeGrid);
         Phi_XYnode(:,i) = StressField(tauXYnode,NodeTable,NodeGrid);
         
+        % Stress modes for central stresses
         Phi_Xcenter(:,i) = sigmaXcenter;
         Phi_Ycenter(:,i) = sigmaYcenter;
         Phi_XYcenter(:,i) =tauXYcenter;

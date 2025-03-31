@@ -1,6 +1,12 @@
 %%=========================================================================
 % Main Script of Bachelor Thesis of Finn Warlimont
 %%=========================================================================
+% To change the load case, the function ForceBoundaryCondition.m has to be
+% altered. 
+% Executing this script will result in some of the graphs of the thesis.
+
+
+
 
 % Dimensions
 
@@ -41,7 +47,9 @@ beta = 1e-3;
 D = alpha*K+beta*M;
 
 
-[Phi_vM,PhiX,PhiY,PhiXY,PhiXnode,PhiYnode,PhiXYnode,PhiXcenter,PhiYcenter,PhiXYcenter] = StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
+[Phi_vM,PhiX,PhiY,PhiXY,PhiXnode,PhiYnode,PhiXYnode,PhiXcenter,PhiYcenter,PhiXYcenter,...
+    Internal_Gauss_X,Internal_Gauss_Y,Internal_Gauss_XY,Internal_Nodal_X,Internal_Nodal_Y,Internal_Nodal_XY] ...
+= StressModeCalculation(NodeGrid,NodeTable,NodePositionTable,nu,E);
 
 %% Solve static FEM with boundary conditions
 f = zeros(NodeGrid(end,end),1);
@@ -55,14 +63,10 @@ tic;
 [t_dir, U_dyn_dir] = DynamicFEM(K,M,D,NodeGrid);
 toc;
 %%
-Kernel = null(K);
-%%
 K = sparse(K);
 M = sparse(M);
 D = sparse(D);
-
-
-
+    
     sigXref = PhiX*U_dyn_dir;
     sigYref = PhiY*U_dyn_dir;
     tauXYref = PhiXY*U_dyn_dir;
@@ -78,14 +82,15 @@ D = sparse(D);
     tauXYcenterref = PhiXYcenter*U_dyn_dir;
     vMcenterRef = vonMisesStress(sigXcenterref,sigYcenterref,tauXYcenterref);
 
-%% Convergence Study of Stresses
+%% Modal Convergence Study of Stresses
 numberOfModes = zeros(4,1);
 total_error=numberOfModes;
 mean_rel_error=numberOfModes;
 
 
-maximum_modes=441;
-inter;
+
+maximum_modes=441;  % Selection of maximum amount of modes
+interval = 20;      % Selection of interval
 
 absStressErrorX = zeros(length(1:interval:maximum_modes),1);
 relStressErrorX = absStressErrorX;
@@ -119,7 +124,6 @@ for i = 1:interval:maximum_modes
     j=(i-1)/interval+1;
     [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,i,[]);
     [~,~,total_error((i-1)/interval+1),mean_rel_error((i-1)/interval+1)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
-
 
     sigX = PhiX*U_dyn_cms;
     sigY = PhiY*U_dyn_cms;
