@@ -12,12 +12,14 @@ function [f_cond,node] = ForceBoundaryCondition(NodeGrid,t)
 
     forceFunction = maxForce * sin(2*pi*frequency*t - phase);
 
+
     %% LC1
     % node = NodeGrid(end,end);
     %% LC2
     % node = NodeGrid(end-1,end);
     %% LC3
     node = NodeGrid(end-1, :);
+
 
     f_cond(node) = forceFunction;
 end
