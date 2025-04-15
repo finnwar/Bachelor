@@ -1,0 +1,6 @@
+%% Dr. Held Dankeschön
+
+x = -60:0;
+x = abs(x);
+
+ohneHeld = 

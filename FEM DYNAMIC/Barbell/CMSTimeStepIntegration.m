@@ -2,11 +2,12 @@ function dXdt = CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie
     
     % Get Boundary conditions
     [U_e, BoundaryNodes, U_e_dot, U_e_ddot] = PositionBoundaryCondition(NodeGrid,t);
-    [f,~] = ForceBoundaryCondition(NodeGrid,t);
-    f_e = f(BoundaryNodes);
-    f(BoundaryNodes)=[];
+    [f,forceNodes] = ForceBoundaryCondition(NodeGrid,t);
+    
+    f_e = f([BoundaryNodes forceNodes]);
+    f([BoundaryNodes forceNodes]) = [];
     f_i = f;
-    f=[f_e;f_i];
+    f = [f_e;f_i];
     f_tilde = transV*f;
     f_tilde(1:length(BoundaryNodes))=[];
     

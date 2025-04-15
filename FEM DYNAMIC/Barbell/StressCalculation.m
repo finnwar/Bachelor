@@ -31,7 +31,7 @@ transformationMatrix = [1+0.5*sqrt(3) -0.5 1-0.5*sqrt(3) -0.5;
                         1-0.5*sqrt(3) -0.5 1+0.5*sqrt(3) -0.5;
                         -0.5 1-0.5*sqrt(3) -0.5 1+0.5*sqrt(3)];
 nodeHelp = [1 2 4 3];
-for e = 1:length(NodeTable)
+for e = 1:length(NodeTable(:,1))
     for T = 1:length(t)        
         for i = 1:2
             for j= 1:2

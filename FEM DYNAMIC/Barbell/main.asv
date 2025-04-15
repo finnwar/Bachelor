@@ -64,31 +64,31 @@ tic;
 toc;
 %%
 tic;
-[t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,440,[]);
+[t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,460,[]);
 toc;
 %%
 PatchPlot('FUCK',U_dyn_cms,t,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle,0)
 
 %
-% K = sparse(K);
-% M = sparse(M);
-% D = sparse(D);
-    % 
-    % sigXref = PhiX*U_dyn_dir;
-    % sigYref = PhiY*U_dyn_dir;
-    % tauXYref = PhiXY*U_dyn_dir;
-    % vMref = vonMisesStress(sigXref,sigYref,tauXYref);
-    % 
-    % sigXnoderef = PhiXnode*U_dyn_dir;
-    % sigYnoderef = PhiYnode*U_dyn_dir;
-    % tauXYnoderef = PhiXYnode*U_dyn_dir;
-    % vMnodeRef = vonMisesStress(sigXnoderef,sigYnoderef,tauXYnoderef);
-    % 
-    % sigXcenterref = PhiXcenter*U_dyn_dir;
-    % sigYcenterref = PhiYcenter*U_dyn_dir;
-    % tauXYcenterref = PhiXYcenter*U_dyn_dir;
-    % vMcenterRef = vonMisesStress(sigXcenterref,sigYcenterref,tauXYcenterref);
+K = sparse(K);
+M = sparse(M);
+D = sparse(D);
+
+    sigXref = PhiX*U_dyn_dir;
+    sigYref = PhiY*U_dyn_dir;
+    tauXYref = PhiXY*U_dyn_dir;
+    vMref = vonMisesStress(sigXref,sigYref,tauXYref);
+
+    sigXnoderef = PhiXnode*U_dyn_dir;
+    sigYnoderef = PhiYnode*U_dyn_dir;
+    tauXYnoderef = PhiXYnode*U_dyn_dir;
+    vMnodeRef = vonMisesStress(sigXnoderef,sigYnoderef,tauXYnoderef);
+
+    sigXcenterref = PhiXcenter*U_dyn_dir;
+    sigYcenterref = PhiYcenter*U_dyn_dir;
+    tauXYcenterref = PhiXYcenter*U_dyn_dir;
+    vMcenterRef = vonMisesStress(sigXcenterref,sigYcenterref,tauXYcenterref);
 
 %% Modal Convergence Study of Stresses
 
@@ -101,81 +101,81 @@ PatchPlot('FUCK',U_dyn_cms,t,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,Number
 % numberOfModes=zeros(maximum_modes/interval,1);
 % total_error=numberOfModes;
 % mean_rel_error=numberOfModes;
-% modeSequence = [0 10 20 40 50 55 60 65 110 120 125 130 140 150 160 170 200 210 220 230 240 250 260 270 280 290 300 320 340 360 380 400 420 440];
-% 
-% absStressErrorX = zeros(length(1:length(modeSequence)),1);
-% relStressErrorX = absStressErrorX;
-% absStressErrorY = absStressErrorX;
-% relStressErrorY = absStressErrorX;
-% absStressErrorXY = absStressErrorX;
-% relStressErrorXY = absStressErrorX;
-% absStressErrorvM = absStressErrorX;
-% relStressErrorvM = absStressErrorX;
-% 
-% absStressErrorXnode = absStressErrorX;
-% relStressErrorXnode = absStressErrorX;
-% absStressErrorYnode = absStressErrorX;
-% relStressErrorYnode = absStressErrorX;
-% absStressErrorXYnode = absStressErrorX;
-% relStressErrorXYnode = absStressErrorX;
-% absStressErrorvMnode = absStressErrorX;
-% relStressErrorvMnode = absStressErrorX;
-% 
-% absStressErrorXcenter = absStressErrorX;
-% relStressErrorXcenter = absStressErrorX;
-% absStressErrorYcenter = absStressErrorX;
-% relStressErrorYcenter = absStressErrorX;
-% absStressErrorXYcenter = absStressErrorX;
-% relStressErrorXYcenter = absStressErrorX;
-% absStressErrorvMcenter = absStressErrorX;
-% relStressErrorvMcenter = absStressErrorX;
-% 
-% j=1;
-% % for i = 0:interval:maximum_modes
-% for i = [0 10 20 40 50 55 60 65 110 120 125 130 140 150 160 170 200 210 220 230 240 250 260 270 280 290 300 320 340 360 380 400 420 440]
-%     numberOfModes(j)=i;
-% 
-% 
-%     [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,i,[]);
-%     [~,~,total_error(j),mean_rel_error(j)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
-% 
-%     sigX = PhiX*U_dyn_cms;
-%     sigY = PhiY*U_dyn_cms;
-%     tauXY = PhiXY*U_dyn_cms;
-%     vM = vonMisesStress(sigX,sigY,tauXY);
-% 
-%     sigXnode = PhiXnode*U_dyn_cms;
-%     sigYnode = PhiYnode*U_dyn_cms;
-%     tauXYnode = PhiXYnode*U_dyn_cms;
-%     vMnode = vonMisesStress(sigXnode,sigYnode,tauXYnode);
-% 
-%     sigXcenter = PhiXcenter*U_dyn_cms;
-%     sigYcenter = PhiYcenter*U_dyn_cms;
-%     tauXYcenter = PhiXYcenter*U_dyn_cms;
-%     vMcenter = vonMisesStress(sigXcenter,sigYcenter,tauXYcenter);
-% 
-%     [~, ~, absStressErrorX(j), relStressErrorX(j),~]=StressErrorCalculation(t_dir,sigXref,t,sigX);
-%     [~, ~, absStressErrorY(j), relStressErrorY(j),~]=StressErrorCalculation(t_dir,sigYref,t,sigY);
-%     [~, ~, absStressErrorXY(j), relStressErrorXY(j),~]=StressErrorCalculation(t_dir,tauXYref,t,tauXY);
-%     [~, ~, absStressErrorvM(j), relStressErrorvM(j),~]=StressErrorCalculation(t_dir,vMref,t,vM);
-% 
-%     [~, ~, absStressErrorXnode(j), relStressErrorXnode(j),~]=StressErrorCalculation(t_dir,sigXnoderef,t,sigXnode);
-%     [~, ~, absStressErrorYnode(j), relStressErrorYnode(j),~]=StressErrorCalculation(t_dir,sigYnoderef,t,sigYnode);
-%     [~, ~, absStressErrorXYnode(j), relStressErrorXYnode(j),~]=StressErrorCalculation(t_dir,tauXYnoderef,t,tauXYnode);
-%     [~, ~, absStressErrorvMnode(j), relStressErrorvMnode(j),~]=StressErrorCalculation(t_dir,vMnodeRef,t,vMnode);
-% 
-%     [~, ~, absStressErrorXcenter(j), relStressErrorXcenter(j),~]=StressErrorCalculation(t_dir,sigXcenterref,t,sigXcenter);
-%     [~, ~, absStressErrorYcenter(j), relStressErrorYcenter(j),~]=StressErrorCalculation(t_dir,sigYcenterref,t,sigYcenter);
-%     [~, ~, absStressErrorXYcenter(j), relStressErrorXYcenter(j),~]=StressErrorCalculation(t_dir,tauXYcenterref,t,tauXYcenter);
-%     [~, ~, absStressErrorvMcenter(j), relStressErrorvMcenter(j),~]=StressErrorCalculation(t_dir,vMcenterRef,t,vMcenter);
-% 
-%     disp(['Mode ', num2str(i), ' is done.' ])
-% 
-%     j = j+1;
-% 
-% end
-% 
-% 
+
+
+absStressErrorX = zeros(length(1:interval:maximum_modes),1);
+relStressErrorX = absStressErrorX;
+absStressErrorY = absStressErrorX;
+relStressErrorY = absStressErrorX;
+absStressErrorXY = absStressErrorX;
+relStressErrorXY = absStressErrorX;
+absStressErrorvM = absStressErrorX;
+relStressErrorvM = absStressErrorX;
+
+absStressErrorXnode = absStressErrorX;
+relStressErrorXnode = absStressErrorX;
+absStressErrorYnode = absStressErrorX;
+relStressErrorYnode = absStressErrorX;
+absStressErrorXYnode = absStressErrorX;
+relStressErrorXYnode = absStressErrorX;
+absStressErrorvMnode = absStressErrorX;
+relStressErrorvMnode = absStressErrorX;
+
+absStressErrorXcenter = absStressErrorX;
+relStressErrorXcenter = absStressErrorX;
+absStressErrorYcenter = absStressErrorX;
+relStressErrorYcenter = absStressErrorX;
+absStressErrorXYcenter = absStressErrorX;
+relStressErrorXYcenter = absStressErrorX;
+absStressErrorvMcenter = absStressErrorX;
+relStressErrorvMcenter = absStressErrorX;
+
+j=1;
+% for i = 0:interval:maximum_modes
+for i = [0 10 20 40 50 55 60 65 110 120 125 130 140 150 160 170 200 210 220 230 240 250 260 270 280 290 300 320 340 360 380 400 420 440]
+    numberOfModes(j)=i;
+
+    
+    [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,i,[]);
+    [~,~,total_error(j),mean_rel_error(j)]=ErrorCalculation(t_dir,U_dyn_dir,t,U_dyn_cms);
+
+    sigX = PhiX*U_dyn_cms;
+    sigY = PhiY*U_dyn_cms;
+    tauXY = PhiXY*U_dyn_cms;
+    vM = vonMisesStress(sigX,sigY,tauXY);
+
+    sigXnode = PhiXnode*U_dyn_cms;
+    sigYnode = PhiYnode*U_dyn_cms;
+    tauXYnode = PhiXYnode*U_dyn_cms;
+    vMnode = vonMisesStress(sigXnode,sigYnode,tauXYnode);
+
+    sigXcenter = PhiXcenter*U_dyn_cms;
+    sigYcenter = PhiYcenter*U_dyn_cms;
+    tauXYcenter = PhiXYcenter*U_dyn_cms;
+    vMcenter = vonMisesStress(sigXcenter,sigYcenter,tauXYcenter);
+
+    [~, ~, absStressErrorX(j), relStressErrorX(j),~]=StressErrorCalculation(t_dir,sigXref,t,sigX);
+    [~, ~, absStressErrorY(j), relStressErrorY(j),~]=StressErrorCalculation(t_dir,sigYref,t,sigY);
+    [~, ~, absStressErrorXY(j), relStressErrorXY(j),~]=StressErrorCalculation(t_dir,tauXYref,t,tauXY);
+    [~, ~, absStressErrorvM(j), relStressErrorvM(j),~]=StressErrorCalculation(t_dir,vMref,t,vM);
+
+    [~, ~, absStressErrorXnode(j), relStressErrorXnode(j),~]=StressErrorCalculation(t_dir,sigXnoderef,t,sigXnode);
+    [~, ~, absStressErrorYnode(j), relStressErrorYnode(j),~]=StressErrorCalculation(t_dir,sigYnoderef,t,sigYnode);
+    [~, ~, absStressErrorXYnode(j), relStressErrorXYnode(j),~]=StressErrorCalculation(t_dir,tauXYnoderef,t,tauXYnode);
+    [~, ~, absStressErrorvMnode(j), relStressErrorvMnode(j),~]=StressErrorCalculation(t_dir,vMnodeRef,t,vMnode);
+
+    [~, ~, absStressErrorXcenter(j), relStressErrorXcenter(j),~]=StressErrorCalculation(t_dir,sigXcenterref,t,sigXcenter);
+    [~, ~, absStressErrorYcenter(j), relStressErrorYcenter(j),~]=StressErrorCalculation(t_dir,sigYcenterref,t,sigYcenter);
+    [~, ~, absStressErrorXYcenter(j), relStressErrorXYcenter(j),~]=StressErrorCalculation(t_dir,tauXYcenterref,t,tauXYcenter);
+    [~, ~, absStressErrorvMcenter(j), relStressErrorvMcenter(j),~]=StressErrorCalculation(t_dir,vMcenterRef,t,vMcenter);
+    
+    disp('Mode', num )
+
+    j = j+1;
+
+end
+
+
 %% Plotting
 figure('Name','Convergence of Relative Error of Stress at Element Center')
 

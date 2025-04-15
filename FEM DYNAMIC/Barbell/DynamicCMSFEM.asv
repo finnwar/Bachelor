@@ -23,12 +23,12 @@ A = [zeros(size(M_tilde_ii\K_tilde_ii)) eye(size(M_tilde_ii\K_tilde_ii));
      -M_tilde_ii\K_tilde_ii -M_tilde_ii\D_tilde_ii];
 
 t_span = [0, 10];
-% opt = odeset('MaxStep',1e-1,'RelTol',1e-4,'AbsTol',1e-7);
+opt = odeset('MaxStep',1e-1);
 % try
 %     [t, X] = ode23s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0,opt);
 % catch
-    t_span = linspace(0, 10,5000);
-    [t, X] = ode15s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0);
+    % t_span = linspace(0, 10,5000);
+    [t, X] = ode23s(@(t,X) CMSTimeStepIntegration(t,A,X,invM_tilde_ii,M_tilde_ie,D_tilde_ie,K_tilde_ie,transV,NodeGrid),t_span,X_0,opt);
 % end
 
 U_e = zeros(NodeGrid(end,end),length(t));
@@ -39,12 +39,10 @@ end
 U_e = U_e(posNodes,:);
 
 q_dyn = X(:,1:end/2).';
-U_f = q_dyn(1:length(forceNodes),:);
 
 q_dyn = [U_e; q_dyn]; 
 U_dyn = V_cms*q_dyn;
-
-U_dyn(1:length(boundaryNodes),:)=[];
+U_f = q_dyn(1:length(forceNodes));
+U_dyn(1:length(posNodes),:)=[];
 U_dyn = BoundaryReinsertion(NodeGrid,t,boundaryNodes,U_dyn);
-U_dyn(forceNodes,:)=U_f;
 end
