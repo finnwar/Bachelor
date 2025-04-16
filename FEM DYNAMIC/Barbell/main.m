@@ -67,7 +67,7 @@ tic;
 [t,U_dyn_cms]=DynamicCMSFEM(K,M,D,NodeGrid,440,[]);
 toc;
 %%
-PatchPlot('FUCK',U_dyn_cms,t,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
+PatchPlot('CMS',U_dyn_cms,t,Phi_vM,PhiX,PhiY,PhiXY,NodeGrid,NodePosition,NumberOfElementsX,NumberOfElementsY, ...
                                                              length_end, length_middle, thickness_end, thickness_middle,0)
 
 %
